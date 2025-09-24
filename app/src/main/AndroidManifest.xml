@@ -27,6 +27,9 @@
         <activity
             android:name=".AddTaskActivity"
             android:exported="false" />
+        <activity
+            android:name=".Activityquadrent"
+            android:exported="false" />
 
     </application>
 
