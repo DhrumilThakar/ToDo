@@ -16,64 +16,123 @@
         android:textColor="#ffffff"
         android:layout_marginBottom="24dp"/>
 
-    <EditText
-        android:id="@+id/edit_text_task_name"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter task title"
-        android:textColorHint="#aaaaaa"
-        android:inputType="textCapSentences"
-        android:padding="12dp"
-        android:background="@drawable/rectangle"
-        android:textColor="#ffffff"
-        android:layout_marginBottom="16dp"/>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="107dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/rectangle"
-        android:padding="12dp"
-        android:text="Category:"
-        android:textColor="#ffffff"
-        android:textSize="16sp" />
-
-    <RadioGroup
-        android:id="@+id/radio_group_category"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginBottom="24dp">
+        android:background="@drawable/rectangle"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp">
 
-        <RadioButton
-            android:id="@+id/radio_major"
+        <EditText
+            android:id="@+id/edit_text_task_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Major"
-            android:textColor="#ffffff"
+            android:hint="Enter task title"
+            android:textColorHint="#aaaaaa"
+            android:inputType="textCapSentences"
+            android:padding="12dp"
+            android:background="@null"
+            android:textColor="#ffffff"/>
+
+        <TextView
+            android:id="@+id/tag_urgent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[U]"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:paddingStart="4dp"
+            android:paddingEnd="4dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/tag_important"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="[I]"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:paddingStart="4dp"
+            android:paddingEnd="8dp"
+            android:visibility="gone" />
+    </LinearLayout>
+
+    <!-- Urgency Selection -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rectangle"
+        android:padding="12dp"
+        android:text="Urgency:"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+    <RadioGroup
+        android:id="@+id/radio_group_urgency"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
+
+        <RadioButton
+            android:id="@+id/radio_not_urgent"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/grey"
             android:checked="true"
-            android:buttonTint="@color/grey"/>
+            android:text="Not Urgent"
+            android:textColor="#ffffff" />
 
         <RadioButton
-            android:id="@+id/radio_minor"
+            android:id="@+id/radio_urgent"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Minor"
-            android:textColor="@color/white"
-            android:buttonTint="@color/grey"/>
+            android:buttonTint="@color/grey"
+            android:text="Urgent"
+            android:textColor="@color/white" />
+    </RadioGroup>
+
+    <!-- Importance Selection -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rectangle"
+        android:padding="12dp"
+        android:text="Importance:"
+        android:textColor="#ffffff"
+        android:textSize="16sp" />
+    <RadioGroup
+        android:id="@+id/radio_group_importance"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:orientation="horizontal"
+        android:weightSum="2">
 
         <RadioButton
-            android:id="@+id/radio_other"
+            android:id="@+id/radio_not_important"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Other"
-            android:textColor="@color/white"
-            android:buttonTint="@color/purple"/>
+            android:buttonTint="@color/grey"
+            android:checked="true"
+            android:text="Not Important"
+            android:textColor="#ffffff" />
 
+        <RadioButton
+            android:id="@+id/radio_important"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:buttonTint="@color/grey"
+            android:text="Important"
+            android:textColor="@color/white" />
     </RadioGroup>
 
     <EditText
@@ -103,57 +162,32 @@
         android:drawableTint="#ffffff"
         android:gravity="center_vertical"/>
 
+    <!-- Sub-category determined by Urgency and Importance -->
     <LinearLayout
-        android:id="@+id/sub_category_layout"
+        android:id="@+id/sub_category_display_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="24dp"
-        android:visibility="gone">
+        android:layout_marginBottom="24dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Sub-category (for tasks not due today):"
+            android:text="Determined Quadrant:"
             android:textSize="16sp"
             android:textColor="#ffffff"
             android:layout_marginBottom="8dp"/>
 
-        <RadioGroup
-            android:id="@+id/radio_group_sub_category"
+        <TextView
+            android:id="@+id/text_view_determined_category"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radio_urgent_important"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Urgent and Important"
-                android:textColor="#ffffff"
-                android:buttonTint="@color/purple"
-                android:checked="true"/>
-            <RadioButton
-                android:id="@+id/radio_urgent_not_important"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Urgent and Not Important"
-                android:textColor="#ffffff"
-                android:buttonTint="@color/purple"/>
-            <RadioButton
-                android:id="@+id/radio_not_urgent_important"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Not Urgent and Important"
-                android:textColor="#ffffff"
-                android:buttonTint="@color/purple"/>
-            <RadioButton
-                android:id="@+id/radio_not_urgent_not_important"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Not Urgent and Not Important"
-                android:textColor="#ffffff"
-                android:buttonTint="@color/purple"/>
-        </RadioGroup>
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/purple"
+            android:textStyle="bold"
+            android:padding="12dp"
+            android:background="@drawable/rectangle"
+            android:text="Not Urgent &amp; Not Important" /> <!-- Default or placeholder -->
     </LinearLayout>
 
     <Button

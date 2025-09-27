@@ -13,49 +13,70 @@ import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import android.util.Log // For logging
+import android.util.Log
 
 class AddTaskActivity : AppCompatActivity() {
 
     private lateinit var taskNameEditText: EditText
     private lateinit var taskDescriptionEditText: EditText
-    private lateinit var categoryRadioGroup: RadioGroup
+    private lateinit var urgencyRadioGroup: RadioGroup
+    private lateinit var importanceRadioGroup: RadioGroup
     private lateinit var dueDateTextView: TextView
-    private lateinit var subCategoryLayout: View // The LinearLayout for sub-categories
-    private lateinit var subCategoryRadioGroup: RadioGroup
+    private lateinit var determinedCategoryTextView: TextView
     private lateinit var addTaskButton: Button
+    private lateinit var tagUrgent: TextView
+    private lateinit var tagImportant: TextView
 
     private val calendar: Calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_add_task) // From your shared XML [1]
+        setContentView(R.layout.activity_add_task)
 
         taskNameEditText = findViewById(R.id.edit_text_task_name)
-        taskDescriptionEditText = findViewById(R.id.description) // Assuming this is the ID
-        categoryRadioGroup = findViewById(R.id.radio_group_category)
+        taskDescriptionEditText = findViewById(R.id.description)
+        urgencyRadioGroup = findViewById(R.id.radio_group_urgency)
+        importanceRadioGroup = findViewById(R.id.radio_group_importance)
         dueDateTextView = findViewById(R.id.text_view_due_date)
-        subCategoryLayout = findViewById(R.id.sub_category_layout)
-        subCategoryRadioGroup = findViewById(R.id.radio_group_sub_category)
+        determinedCategoryTextView = findViewById(R.id.text_view_determined_category)
         addTaskButton = findViewById(R.id.button_add_task)
+        tagUrgent = findViewById(R.id.tag_urgent)
+        tagImportant = findViewById(R.id.tag_important)
 
         // Set up due date picker
         dueDateTextView.setOnClickListener {
             showDatePickerDialog()
         }
 
-        // Show/hide sub-category based on due date (example logic)
-        // You might want more sophisticated logic for this
-        // For simplicity, let's assume if a due date is selected and it's not "today",
-        // then show sub-categories. This is a placeholder for your actual logic.
-        // categoryRadioGroup.setOnCheckedChangeListener { group, checkedId ->
-        //     // Potentially show/hide based on main category too
-        // }
+        // Set up listeners for radio groups to update the determined quadrant
+        val updateQuadrantListener = RadioGroup.OnCheckedChangeListener { _, _ ->
+            updateDeterminedQuadrant()
+        }
+        urgencyRadioGroup.setOnCheckedChangeListener(updateQuadrantListener)
+        importanceRadioGroup.setOnCheckedChangeListener(updateQuadrantListener)
 
+        // Set the initial quadrant text and tags
+        updateDeterminedQuadrant()
 
         addTaskButton.setOnClickListener {
             saveTask()
         }
+    }
+
+    private fun updateDeterminedQuadrant() {
+        val isUrgent = urgencyRadioGroup.checkedRadioButtonId == R.id.radio_urgent
+        val isImportant = importanceRadioGroup.checkedRadioButtonId == R.id.radio_important
+
+        val quadrantText = when {
+            isUrgent && isImportant -> "Urgent and Important"
+            isUrgent && !isImportant -> "Urgent and Not Important"
+            !isUrgent && isImportant -> "Not Urgent and Important"
+            else -> "Not Urgent and Not Important"
+        }
+        determinedCategoryTextView.text = quadrantText
+
+        tagUrgent.visibility = if (isUrgent) View.VISIBLE else View.GONE
+        tagImportant.visibility = if (isImportant) View.VISIBLE else View.GONE
     }
 
     private fun showDatePickerDialog() {
@@ -64,14 +85,6 @@ class AddTaskActivity : AppCompatActivity() {
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
             updateDueDateInView()
-
-            // Example: Show sub-category if date is not today
-            // This is a simple check, refine as needed.
-            if (!isToday(calendar)) {
-                subCategoryLayout.visibility = View.VISIBLE
-            } else {
-                subCategoryLayout.visibility = View.GONE
-            }
         }
 
         DatePickerDialog(
@@ -84,17 +97,10 @@ class AddTaskActivity : AppCompatActivity() {
     }
 
     private fun updateDueDateInView() {
-        val myFormat = "dd/MM/yyyy" // Or "EEE, MMM d, yyyy"
+        val myFormat = "dd/MM/yyyy"
         val sdf = SimpleDateFormat(myFormat, Locale.US)
         dueDateTextView.text = sdf.format(calendar.time)
     }
-
-    private fun isToday(cal: Calendar): Boolean {
-        val today = Calendar.getInstance()
-        return today.get(Calendar.YEAR) == cal.get(Calendar.YEAR) &&
-                today.get(Calendar.DAY_OF_YEAR) == cal.get(Calendar.DAY_OF_YEAR)
-    }
-
 
     private fun saveTask() {
         val taskName = taskNameEditText.text.toString().trim()
@@ -106,50 +112,22 @@ class AddTaskActivity : AppCompatActivity() {
             return
         }
 
-        val selectedCategoryId = categoryRadioGroup.checkedRadioButtonId
-        val category = when (selectedCategoryId) {
-            R.id.radio_major -> "Major"
-            R.id.radio_minor -> "Minor"
-            R.id.radio_other -> "Other"
-            else -> "" // Should not happen if one is checked by default
+        // Get the quadrant from the TextView, which is dynamically updated
+        val quadrantCategory = determinedCategoryTextView.text.toString()
+
+        val dueDate = if (dueDateTextView.text.toString() != "Select Due Date") {
+            dueDateTextView.text.toString()
+        } else {
+            null
         }
-
-//        val dueDate = if (dueDateTextView.text.toString() != getString(R.string.select_due_date_default_text)) { // Assuming you have a default string
-//            dueDateTextView.text.toString()
-//        } else {
-//            null
-//        }
-        // If your default text in XML is "Select Due Date" directly, use that:
-         val dueDate = if(dueDateTextView.text.toString() != "Select Due Date") {
-             dueDateTextView.text.toString()
-         }
-        else
-         {
-             null
-         }
-
-
-        var subCategory: String? = null
-        if (subCategoryLayout.visibility == View.VISIBLE) {
-            val selectedSubCategoryId = subCategoryRadioGroup.checkedRadioButtonId
-            subCategory = when (selectedSubCategoryId) {
-                R.id.radio_urgent_important -> "Urgent and Important"
-                R.id.radio_urgent_not_important -> "Urgent and Not Important"
-                R.id.radio_not_urgent_important -> "Not Urgent and Important"
-                R.id.radio_not_urgent_not_important -> "Not Urgent and Not Important"
-                else -> null
-            }
-        }
-
 
         val resultIntent = Intent()
         resultIntent.putExtra("TASK_NAME", taskName)
         resultIntent.putExtra("TASK_DESCRIPTION", taskDescription)
-        resultIntent.putExtra("TASK_CATEGORY", category)
+        resultIntent.putExtra("TASK_CATEGORY", quadrantCategory)
         resultIntent.putExtra("TASK_DUE_DATE", dueDate)
-        subCategory?.let { resultIntent.putExtra("TASK_SUB_CATEGORY", it) }
 
         setResult(Activity.RESULT_OK, resultIntent)
-        finish() // Close AddTaskActivity and return to MainActivity
+        finish()
     }
 }

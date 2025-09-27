@@ -28,7 +28,10 @@
             android:name=".AddTaskActivity"
             android:exported="false" />
         <activity
-            android:name=".Activityquadrent"
+            android:name=".ActivityQuadrent"
+            android:exported="false" />
+        <activity
+            android:name=".BambooTargetActivity"
             android:exported="false" />
 
     </application>
