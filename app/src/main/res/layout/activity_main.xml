@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="#1A1A2F"
+    android:background="#1A1B26"
     tools:context=".MainActivity">
 
     <TextView
@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:text="Let's get it done..."
         android:fontFamily="serif-monospace"
-        android:textColor="#F7EEDD"
+        android:textColor="#E5E5E5"
         android:textSize="30sp"
         android:gravity="center"
         android:paddingTop="8dp"
@@ -35,7 +35,7 @@
             android:layout_height="90dp"
             android:layout_weight="1"
             android:gravity="center_horizontal|center_vertical"
-            android:textColor="#F7EEDD"
+            android:textColor="#A1A1AA"
             android:textSize="18sp"
             android:textStyle="bold"
             android:text=""
@@ -85,7 +85,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text=""
-                android:textColor="#F7EEDD"
+                android:textColor="#A1A1AA"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone"/>
@@ -123,7 +123,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text=""
-                android:textColor="#F7EEDD"
+                android:textColor="#A1A1AA"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone" />
@@ -160,7 +160,7 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:text=""
-                android:textColor="#F7EEDD"
+                android:textColor="#A1A1AA"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone" />
@@ -191,192 +191,50 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:fillViewport="true">
+        <!-- Tasks Container -->
         <LinearLayout
-            android:id="@+id/taskContainer"
+            android:id="@+id/tasksContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4A4A6D" />
-
+            <!-- This will be your initial "Add New Task" button/view -->
+            <!-- You can customize its appearance as needed -->
             <LinearLayout
+                android:id="@+id/addTaskPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center_vertical"
-                android:paddingVertical="12dp">
-                <ImageButton
-                    android:id="@+id/add_task_btn_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="Add List Task 1"
-                    android:src="@drawable/rounded_add_24" />
-                <TextView
-                    android:id="@+id/task_name_display_1"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text=""
-                    android:textColor="#F7EEDD"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-                <CheckBox
-                    android:id="@+id/task_checkbox_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="#D4C8AE"
-                    android:visibility="gone"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4A4A6D" />
+                android:paddingVertical="12dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true">
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp">
-                <ImageButton
-                    android:id="@+id/add_task_btn_2"
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="Add List Task 2"
-                    android:src="@drawable/rounded_add_24" />
-                <TextView
-                    android:id="@+id/task_name_display_2"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text=""
-                    android:textColor="#F7EEDD"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-                <CheckBox
-                    android:id="@+id/task_checkbox_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="#D4C8AE"
-                    android:visibility="gone"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4A4A6D" />
+                    android:src="@drawable/rounded_add_24"
+                    android:layout_marginStart="16dp"
+                    android:contentDescription="Add New Task Icon"/>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp">
-                <ImageButton
-                    android:id="@+id/add_task_btn_3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="Add List Task 3"
-                    android:src="@drawable/rounded_add_24" />
                 <TextView
-                    android:id="@+id/task_name_display_3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text=""
-                    android:textColor="#F7EEDD"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-                <CheckBox
-                    android:id="@+id/task_checkbox_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:buttonTint="#D4C8AE"
-                    android:visibility="gone"/>
+                    android:layout_marginStart="8dp"
+                    android:text="Add New Task"
+                    android:textColor="#A1A1AA"
+                    android:textSize="16sp" />
             </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4A4A6D" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp">
-                <ImageButton
-                    android:id="@+id/add_task_btn_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="Add List Task 4"
-                    android:src="@drawable/rounded_add_24" />
-                <TextView
-                    android:id="@+id/task_name_display_4"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text=""
-                    android:textColor="#F7EEDD"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-                <CheckBox
-                    android:id="@+id/task_checkbox_4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="#D4C8AE"
-                    android:visibility="gone"/>
-            </LinearLayout>
             <View
+                android:id="@+id/addTaskDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#4A4A6D" />
+                android:background="#24283B" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp">
-                <ImageButton
-                    android:id="@+id/add_task_btn_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@null"
-                    android:contentDescription="Add List Task 5"
-                    android:src="@drawable/rounded_add_24" />
-                <TextView
-                    android:id="@+id/task_name_display_5"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:text=""
-                    android:textColor="#F7EEDD"
-                    android:textSize="16sp"
-                    android:visibility="gone" />
-                <CheckBox
-                    android:id="@+id/task_checkbox_5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:buttonTint="#D4C8AE"
-                    android:visibility="gone"/>
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#4A4A6D" />
         </LinearLayout>
+
     </ScrollView>
 
     <Space android:layout_width="match_parent" android:layout_height="16dp" />

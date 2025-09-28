@@ -5,13 +5,21 @@ import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.ActivityResultLauncher // Import this
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.todo.addTaskActivity
+import com.example.todo.ActivityQuadrent
+//import com.example.todo.addTaskPlaceholder
+// Remove: import androidx.appcompat.app.AlertDialog
+// Remove: import com.google.android.material.textfield.TextInputEditText
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,80 +39,67 @@ class MainActivity : AppCompatActivity() {
     private lateinit var minorTaskNameDisplay3: TextView
     private lateinit var completeMinorTaskCheckBox3: CheckBox
 
-    // List Item Task Views (in ScrollView)
-    private lateinit var addTaskBtn1: ImageButton
-    private lateinit var taskNameDisplay1: TextView
-    private lateinit var taskCheckbox1: CheckBox
-    private lateinit var addTaskBtn2: ImageButton
-    private lateinit var taskNameDisplay2: TextView
-    private lateinit var taskCheckbox2: CheckBox
-    private lateinit var addTaskBtn3: ImageButton
-    private lateinit var taskNameDisplay3: TextView
-    private lateinit var taskCheckbox3: CheckBox
-    private lateinit var addTaskBtn4: ImageButton
-    private lateinit var taskNameDisplay4: TextView
-    private lateinit var taskCheckbox4: CheckBox
-    private lateinit var addTaskBtn5: ImageButton
-    private lateinit var taskNameDisplay5: TextView
-    private lateinit var taskCheckbox5: CheckBox
+    // --- Views for dynamic task list ---
+    private lateinit var tasksContainer: LinearLayout
+    private lateinit var addTaskPlaceholder: LinearLayout
+    private lateinit var addTaskDivider: View
 
     // Navigation buttons
     private lateinit var homeButton: ImageButton
     private lateinit var calendarButton: ImageButton
     private lateinit var bambooButton: ImageButton
 
+    // To identify which "+" button was clicked (for fixed main/minor tasks)
+    private var clickedFixedTaskSourceTag: String? = null
 
-    // To identify which "+" button was clicked
-    private var clickedTaskSourceTag: String? = null
-
-    private val addTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+    // Launcher for getting results from AddTaskActivity (for FIXED main/minor tasks)
+    private val addFixedTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.let { data ->
                 val taskName = data.getStringExtra("TASK_NAME")
-                // val taskCategory = data.getStringExtra("TASK_CATEGORY") // Retrieve if needed
-
                 if (!taskName.isNullOrBlank()) {
-                    Log.d("MainActivity", "Received task: $taskName for source: $clickedTaskSourceTag")
-                    when (clickedTaskSourceTag) {
+                    Log.d("MainActivity", "Received task: $taskName for fixed source: $clickedFixedTaskSourceTag")
+                    when (clickedFixedTaskSourceTag) {
                         "main_task" -> {
-                            updateTaskDisplay(mainTaskNameDisplay, taskName, addMainTaskBtn, completeMainTaskCheckBox)
+                            updateFixedTaskDisplay(mainTaskNameDisplay, taskName, addMainTaskBtn, completeMainTaskCheckBox)
                         }
                         "minor_task_1" -> {
-                            updateTaskDisplay(minorTaskNameDisplay1, taskName, addMinorTaskBtn1, completeMinorTaskCheckBox1)
+                            updateFixedTaskDisplay(minorTaskNameDisplay1, taskName, addMinorTaskBtn1, completeMinorTaskCheckBox1)
                         }
                         "minor_task_2" -> {
-                            updateTaskDisplay(minorTaskNameDisplay2, taskName, addMinorTaskBtn2, completeMinorTaskCheckBox2)
+                            updateFixedTaskDisplay(minorTaskNameDisplay2, taskName, addMinorTaskBtn2, completeMinorTaskCheckBox2)
                         }
                         "minor_task_3" -> {
-                            updateTaskDisplay(minorTaskNameDisplay3, taskName, addMinorTaskBtn3, completeMinorTaskCheckBox3)
-                        }
-                        "list_item_1" -> {
-                            updateTaskDisplay(taskNameDisplay1, taskName, addTaskBtn1, taskCheckbox1)
-                        }
-                        "list_item_2" -> {
-                            updateTaskDisplay(taskNameDisplay2, taskName, addTaskBtn2, taskCheckbox2)
-                        }
-                        "list_item_3" -> {
-                            updateTaskDisplay(taskNameDisplay3, taskName, addTaskBtn3, taskCheckbox3)
-                        }
-                        "list_item_4" -> {
-                            updateTaskDisplay(taskNameDisplay4, taskName, addTaskBtn4, taskCheckbox4)
-                        }
-                        "list_item_5" -> {
-                            updateTaskDisplay(taskNameDisplay5, taskName, addTaskBtn5, taskCheckbox5)
+                            updateFixedTaskDisplay(minorTaskNameDisplay3, taskName, addMinorTaskBtn3, completeMinorTaskCheckBox3)
                         }
                         else -> {
-                            Log.w("MainActivity", "Task added without a specific source tag or tag not recognized.")
-                            // Optionally, implement a fallback if needed, e.g., find the first available slot.
+                            Log.w("MainActivity", "Fixed task source tag not recognized: $clickedFixedTaskSourceTag")
                         }
                     }
                 } else {
-                    Log.w("MainActivity", "Received null or blank task name.")
+                    Log.w("MainActivity", "Received null or blank task name for fixed tasks.")
                 }
             }
         }
-        clickedTaskSourceTag = null // Reset tag after use
+        clickedFixedTaskSourceTag = null // Reset tag after use
     }
+
+    // --- NEW: Launcher for getting results from AddTaskActivity for the DYNAMIC LIST ---
+    private val addDynamicTaskLauncher: ActivityResultLauncher<Intent> =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                result.data?.let { data ->
+                    val taskName = data.getStringExtra("TASK_NAME")
+                    if (!taskName.isNullOrBlank()) {
+                        Log.d("MainActivity", "Received task for dynamic list: $taskName")
+                        addNewTaskViewToDynamicList(taskName)
+                    } else {
+                        Log.w("MainActivity", "Received null or blank task name for dynamic list.")
+                    }
+                }
+            }
+        }
+    // --- END NEW LAUNCHER ---
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,107 +121,121 @@ class MainActivity : AppCompatActivity() {
         minorTaskNameDisplay3 = findViewById(R.id.minor_task_name_display_3)
         completeMinorTaskCheckBox3 = findViewById(R.id.complete3)
 
-        // Initialize List Item Task Views
-        addTaskBtn1 = findViewById(R.id.add_task_btn_1)
-        taskNameDisplay1 = findViewById(R.id.task_name_display_1)
-        taskCheckbox1 = findViewById(R.id.task_checkbox_1)
-        addTaskBtn2 = findViewById(R.id.add_task_btn_2)
-        taskNameDisplay2 = findViewById(R.id.task_name_display_2)
-        taskCheckbox2 = findViewById(R.id.task_checkbox_2)
-        addTaskBtn3 = findViewById(R.id.add_task_btn_3)
-        taskNameDisplay3 = findViewById(R.id.task_name_display_3)
-        taskCheckbox3 = findViewById(R.id.task_checkbox_3)
-        addTaskBtn4 = findViewById(R.id.add_task_btn_4)
-        taskNameDisplay4 = findViewById(R.id.task_name_display_4)
-        taskCheckbox4 = findViewById(R.id.task_checkbox_4)
-        addTaskBtn5 = findViewById(R.id.add_task_btn_5)
-        taskNameDisplay5 = findViewById(R.id.task_name_display_5)
-        taskCheckbox5 = findViewById(R.id.task_checkbox_5)
+        // Initialize dynamic task list views
+        tasksContainer = findViewById(R.id.tasksContainer)
+        addTaskPlaceholder = findViewById(R.id.addTaskPlaceholder)
+        addTaskDivider = findViewById(R.id.addTaskDivider)
+
+        // --- MODIFIED: addTaskPlaceholder click listener ---
+        addTaskPlaceholder.setOnClickListener {
+            Log.d("MainActivity", "Add New Task placeholder clicked, launching AddTaskActivity for dynamic list.")
+            val intent = Intent(this, AddTaskActivity::class.java)
+            // Optionally, you can pass an extra to AddTaskActivity if it needs to know
+            // it's being called for the dynamic list vs a fixed slot.
+            // intent.putExtra("TASK_TYPE", "dynamic_list_item")
+            addDynamicTaskLauncher.launch(intent)
+        }
+        // --- END MODIFICATION ---
 
         // Initialize Navigation Buttons
         homeButton = findViewById(R.id.home)
         calendarButton = findViewById(R.id.calendar)
         bambooButton = findViewById(R.id.bamboo)
 
+        // Setup click listeners for fixed "+" buttons (main/minor tasks)
+        addMainTaskBtn.setOnClickListener { startAddTaskActivityForFixedTask("main_task") }
+        addMinorTaskBtn1.setOnClickListener { startAddTaskActivityForFixedTask("minor_task_1") }
+        addMinorTaskBtn2.setOnClickListener { startAddTaskActivityForFixedTask("minor_task_2") }
+        addMinorTaskBtn3.setOnClickListener { startAddTaskActivityForFixedTask("minor_task_3") }
 
-        // Setup click listeners for all "+" buttons
-        addMainTaskBtn.setOnClickListener { startAddTaskActivity("main_task") }
-        addMinorTaskBtn1.setOnClickListener { startAddTaskActivity("minor_task_1") }
-        addMinorTaskBtn2.setOnClickListener { startAddTaskActivity("minor_task_2") }
-        addMinorTaskBtn3.setOnClickListener { startAddTaskActivity("minor_task_3") }
-
-        addTaskBtn1.setOnClickListener { startAddTaskActivity("list_item_1") }
-        addTaskBtn2.setOnClickListener { startAddTaskActivity("list_item_2") }
-        addTaskBtn3.setOnClickListener { startAddTaskActivity("list_item_3") }
-        addTaskBtn4.setOnClickListener { startAddTaskActivity("list_item_4") }
-        addTaskBtn5.setOnClickListener { startAddTaskActivity("list_item_5") }
-
-        // Setup CheckBox Listeners for strikethrough effect
+        // Setup CheckBox Listeners for strikethrough effect (for fixed tasks)
         setupCheckBoxListener(completeMainTaskCheckBox, mainTaskNameDisplay)
         setupCheckBoxListener(completeMinorTaskCheckBox1, minorTaskNameDisplay1)
         setupCheckBoxListener(completeMinorTaskCheckBox2, minorTaskNameDisplay2)
         setupCheckBoxListener(completeMinorTaskCheckBox3, minorTaskNameDisplay3)
-        setupCheckBoxListener(taskCheckbox1, taskNameDisplay1)
-        setupCheckBoxListener(taskCheckbox2, taskNameDisplay2)
-        setupCheckBoxListener(taskCheckbox3, taskNameDisplay3)
-        setupCheckBoxListener(taskCheckbox4, taskNameDisplay4)
-        setupCheckBoxListener(taskCheckbox5, taskNameDisplay5)
-
 
         // Navigation Listeners
         homeButton.setOnClickListener {
             Log.d("Navigation", "Home clicked")
-            // Example: Refresh MainActivity or go to a defined "home state"
             Toast.makeText(this, "Home Clicked", Toast.LENGTH_SHORT).show()
-            // To truly refresh, you might restart the activity:
-            // val intent = Intent(this, MainActivity::class.java)
-            // intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-            // startActivity(intent)
-            // finish()
         }
 
         calendarButton.setOnClickListener {
             Log.d("Navigation", "Calendar clicked")
-            // Ensure you have CalendarActivity.kt and it's declared in AndroidManifest.xml
             val intent = Intent(this, ActivityQuadrent::class.java)
             startActivity(intent)
         }
 
         bambooButton.setOnClickListener {
             Log.d("Navigation", "Bamboo/List Check clicked")
-            // For now, just a Toast. Replace with Intent if you create BambooActivity.
             Toast.makeText(this, "List Check (Bamboo) Clicked", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun startAddTaskActivity(sourceTag: String) {
-        clickedTaskSourceTag = sourceTag // Store which button/task source initiated this
+    private fun startAddTaskActivityForFixedTask(sourceTag: String) {
+        clickedFixedTaskSourceTag = sourceTag // Use the renamed variable
         val intent = Intent(this, AddTaskActivity::class.java)
         // Optionally pass the sourceTag to AddTaskActivity if it needs to customize its behavior
-        // intent.putExtra("SOURCE_TAG", sourceTag)
-        Log.d("MainActivity", "Starting AddTaskActivity for source: $sourceTag")
-        addTaskLauncher.launch(intent)
+        intent.putExtra("SOURCE_TAG", sourceTag) // Good practice to inform AddTaskActivity
+        Log.d("MainActivity", "Starting AddTaskActivity for fixed task source: $sourceTag")
+        addFixedTaskLauncher.launch(intent) // Use the renamed launcher
     }
 
-    private fun updateTaskDisplay(textView: TextView, taskName: String, addButton: ImageButton, checkBox: CheckBox) {
+    private fun updateFixedTaskDisplay(textView: TextView, taskName: String, addButton: ImageButton, checkBox: CheckBox) {
         textView.text = taskName
         textView.visibility = View.VISIBLE
-        checkBox.isChecked = false // Ensure checkbox is unchecked when a new task is added
+        checkBox.isChecked = false
         checkBox.visibility = View.VISIBLE
-        addButton.visibility = View.GONE // Hide the "+" button for this slot
-        Log.i("MainActivity", "Updated display for slot. TextView: ${resources.getResourceEntryName(textView.id)}, Task: $taskName")
+        addButton.visibility = View.GONE
+        Log.i("MainActivity", "Updated display for fixed slot. TextView: ${resources.getResourceEntryName(textView.id)}, Task: $taskName")
+    }
+
+    // REMOVED: showAddTaskDialogForDynamicList() as we are now using AddTaskActivity
+
+    private fun addNewTaskViewToDynamicList(taskName: String) {
+        val inflater = LayoutInflater.from(this)
+        val taskView = inflater.inflate(R.layout.list_item_task, tasksContainer, false)
+
+        val taskNameDisplay = taskView.findViewById<TextView>(R.id.task_name_display)
+        val taskCheckbox = taskView.findViewById<CheckBox>(R.id.task_checkbox)
+
+        taskNameDisplay.text = taskName
+        taskCheckbox.isChecked = false
+        setupCheckBoxListener(taskCheckbox, taskNameDisplay)
+
+        val indexOfPlaceholder = tasksContainer.indexOfChild(addTaskPlaceholder)
+        if (indexOfPlaceholder != -1) {
+            tasksContainer.removeViewAt(indexOfPlaceholder)
+            if (tasksContainer.indexOfChild(addTaskDivider) != -1) {
+                tasksContainer.removeView(addTaskDivider)
+            }
+        }
+
+        tasksContainer.addView(taskView)
+
+        val newDivider = View(this)
+        val layoutParams = LinearLayout.LayoutParams(
+            LinearLayout.LayoutParams.MATCH_PARENT,
+            (1 * resources.displayMetrics.density).toInt()
+        )
+        newDivider.setBackgroundColor(getColor(R.color.task_divider_color)) // Make sure R.color.task_divider_color is defined
+        newDivider.layoutParams = layoutParams
+        tasksContainer.addView(newDivider)
+
+        tasksContainer.addView(addTaskPlaceholder)
+        tasksContainer.addView(addTaskDivider)
+
+        Log.i("MainActivity", "Added new dynamic task: $taskName")
     }
 
     private fun setupCheckBoxListener(checkBox: CheckBox, textView: TextView) {
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             if (isChecked) {
                 textView.paintFlags = textView.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
-                Log.d("Checkbox", "Task '${textView.text}' marked complete.")
             } else {
                 textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
-                Log.d("Checkbox", "Task '${textView.text}' marked incomplete.")
             }
-            // Future: Here you would also update your data model and persist the change if needed.
+            Log.d("Checkbox", "Task '${textView.text}' status changed to: ${if (isChecked) "complete" else "incomplete"}")
         }
     }
 }

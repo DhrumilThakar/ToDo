@@ -3,12 +3,12 @@
     android:shape="rectangle">
 
     <!-- Solid fill color -->
-    <solid android:color="#242443" />
+    <solid android:color="#24283B" />
 
     <!-- Optional: Add a stroke (border) -->
     <stroke
         android:width="0.5dp"
-        android:color="#7A12FF" />
+        android:color="#3A3F58" />
 
     <!-- Optional: Add rounded corners -->
     <corners android:radius="8dp" />

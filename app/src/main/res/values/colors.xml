@@ -10,4 +10,5 @@
     <color name="purpole">#242443</color>
     <color name ="grey">#777E99</color>
     <color name="purple">#7A12FF</color>
+    <color name="task_divider_color">#4A4A6D</color>
 </resources>
