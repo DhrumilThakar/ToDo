@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "484264655923",
+    "firebase_url": "https://to-do-list-62384-default-rtdb.firebaseio.com",
+    "project_id": "to-do-list-62384",
+    "storage_bucket": "to-do-list-62384.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484264655923:android:4ffaa158477585b1a6f746",
+        "android_client_info": {
+          "package_name": "com.example.shittodo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484264655923-kvj4hc3ogv9blaq8r34bsd4admbf2f42.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA2yy_xXhytC_pzGnecitaU4LOSKS_HGQA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484264655923-kvj4hc3ogv9blaq8r34bsd4admbf2f42.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
