@@ -1,4 +1,4 @@
-package com.example.todo // Your package name
+package com.example.todo
 
 import android.app.Activity
 import android.app.DatePickerDialog

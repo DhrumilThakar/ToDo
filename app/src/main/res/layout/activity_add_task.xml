@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal"
-    android:background="#1A1A2F">
+    android:background="#1A1A2F"
+    android:padding="24dp">
 
     <TextView
+        android:id="@+id/titleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add a New Task"
         android:textSize="22sp"
         android:textStyle="bold"
         android:textColor="#ffffff"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="24dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/taskNameLayout"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@drawable/rectangle"
         android:gravity="center_vertical"
-        android:layout_marginBottom="16dp">
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/titleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <EditText
             android:id="@+id/edit_text_task_name"
@@ -59,23 +67,30 @@
             android:visibility="gone" />
     </LinearLayout>
 
-    <!-- Urgency Selection -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/urgencyTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rectangle"
         android:padding="12dp"
         android:text="Urgency:"
         android:textColor="#ffffff"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/taskNameLayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <RadioGroup
         android:id="@+id/radio_group_urgency"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/urgencyTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <RadioButton
             android:id="@+id/radio_not_urgent"
@@ -97,23 +112,30 @@
             android:textColor="@color/white" />
     </RadioGroup>
 
-    <!-- Importance Selection -->
     <TextView
-        android:layout_width="match_parent"
+        android:id="@+id/importanceTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/rectangle"
         android:padding="12dp"
         android:text="Importance:"
         android:textColor="#ffffff"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        app:layout_constraintTop_toBottomOf="@id/radio_group_urgency"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
     <RadioGroup
         android:id="@+id/radio_group_importance"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
         android:orientation="horizontal"
-        android:weightSum="2">
+        android:weightSum="2"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/importanceTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <RadioButton
             android:id="@+id/radio_not_important"
@@ -137,38 +159,46 @@
 
     <EditText
         android:id="@+id/description"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:hint="Enter task description"
         android:textColorHint="#aaaaaa"
         android:inputType="textCapSentences"
         android:padding="12dp"
         android:background="@drawable/rectangle"
         android:textColor="#ffffff"
-        android:layout_marginBottom="16dp"/>
+        app:layout_constraintTop_toBottomOf="@id/radio_group_importance"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/text_view_due_date"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="Select Due Date"
         android:textSize="16sp"
         android:padding="12dp"
         android:textColor="#ffffff"
         android:background="@drawable/rectangle"
-        android:layout_marginBottom="16dp"
         android:clickable="true"
         android:drawableEnd="@drawable/ic_calender"
         android:drawableTint="#ffffff"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/description"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Sub-category determined by Urgency and Importance -->
     <LinearLayout
         android:id="@+id/sub_category_display_layout"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginBottom="24dp">
+        android:layout_marginTop="16dp"
+        app:layout_constraintTop_toBottomOf="@id/text_view_due_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <TextView
             android:layout_width="match_parent"
@@ -187,16 +217,21 @@
             android:textStyle="bold"
             android:padding="12dp"
             android:background="@drawable/rectangle"
-            android:text="Not Urgent &amp; Not Important" /> <!-- Default or placeholder -->
+            android:text="Not Urgent &amp; Not Important" />
     </LinearLayout>
 
     <Button
         android:id="@+id/button_add_task"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Add Task"
         android:backgroundTint="@color/purple"
         android:textColor="#FFFFFF"
-        android:padding="12dp"/>
+        android:padding="12dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/sub_category_display_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
