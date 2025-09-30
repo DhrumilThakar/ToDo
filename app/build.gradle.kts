@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+//    id("com.google.gms.google-services")
 }
 
 android {
@@ -58,6 +59,10 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
+    implementation("com.google.android.libraries.identity.googleid:googleid:1.1.0")
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("com.google.android.material:material:1.12.0")
+    implementation("androidx.credentials:credentials:1.3.0-alpha01")
+    implementation("androidx.credentials:credentials-play-services-auth:1.3.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.0")
 }
