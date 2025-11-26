@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#1A1B26"
+    android:background="#000000"
     tools:context=".MainActivity">
 
     <TextView
@@ -36,23 +36,8 @@
         app:layout_constraintBottom_toTopOf="@+id/minorTasksLayout"
         android:layout_marginTop="8dp">
 
-        <TextView
-            android:id="@+id/main_task_name_display"
-            android:layout_width="0dp"
-            android:layout_height="90dp"
-            android:gravity="center_horizontal|center_vertical"
-            android:textColor="#A1A1AA"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:text=""
-            android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/add_main_task_btn"
-            app:layout_constraintHorizontal_weight="1"
-            tools:visibility="visible"/>
-
+        <!-- This button should only be visible when there is NO task. -->
+        <!-- Its constraints are simple: center in parent. -->
         <ImageButton
             android:id="@+id/add_main_task_btn"
             android:layout_width="wrap_content"
@@ -67,19 +52,38 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
 
+        <!-- This TextView is for displaying the task. -->
+        <!-- It's constrained to the parent's start and the CheckBox's start. -->
+        <TextView
+            android:id="@+id/main_task_name_display"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:gravity="center_vertical|start"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
+            android:textColor="#A1A1AA"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/complete"
+            tools:visibility="visible"/>
+
         <CheckBox
             android:id="@+id/complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
             android:buttonTint="#D4C8AE"
             android:checked="false"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="@id/main_task_name_display"
-            app:layout_constraintBottom_toBottomOf="@id/main_task_name_display"
-            app:layout_constraintStart_toEndOf="@id/main_task_name_display"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             tools:visibility="visible"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     <LinearLayout
         android:id="@+id/minorTasksLayout"

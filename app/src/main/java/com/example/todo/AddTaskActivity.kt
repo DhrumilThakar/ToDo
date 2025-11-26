@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import android.util.Log
 
 class AddTaskActivity : AppCompatActivity() {
 
@@ -28,6 +27,7 @@ class AddTaskActivity : AppCompatActivity() {
     private lateinit var tagImportant: TextView
 
     private val calendar: Calendar = Calendar.getInstance()
+    private var selectedDueDate: Long = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,6 +84,7 @@ class AddTaskActivity : AppCompatActivity() {
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, monthOfYear)
             calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+            selectedDueDate = calendar.timeInMillis
             updateDueDateInView()
         }
 
@@ -104,7 +105,6 @@ class AddTaskActivity : AppCompatActivity() {
 
     private fun saveTask() {
         val taskName = taskNameEditText.text.toString().trim()
-        val taskDescription = taskDescriptionEditText.text.toString().trim()
 
         if (taskName.isEmpty()) {
             taskNameEditText.error = "Task name cannot be empty"
@@ -112,20 +112,14 @@ class AddTaskActivity : AppCompatActivity() {
             return
         }
 
-        // Get the quadrant from the TextView, which is dynamically updated
-        val quadrantCategory = determinedCategoryTextView.text.toString()
-
-        val dueDate = if (dueDateTextView.text.toString() != "Select Due Date") {
-            dueDateTextView.text.toString()
-        } else {
-            null
-        }
+        val isUrgent = urgencyRadioGroup.checkedRadioButtonId == R.id.radio_urgent
+        val isImportant = importanceRadioGroup.checkedRadioButtonId == R.id.radio_important
 
         val resultIntent = Intent()
         resultIntent.putExtra("TASK_NAME", taskName)
-        resultIntent.putExtra("TASK_DESCRIPTION", taskDescription)
-        resultIntent.putExtra("TASK_CATEGORY", quadrantCategory)
-        resultIntent.putExtra("TASK_DUE_DATE", dueDate)
+        resultIntent.putExtra("IS_URGENT", isUrgent)
+        resultIntent.putExtra("IS_IMPORTANT", isImportant)
+        resultIntent.putExtra("DUE_DATE", selectedDueDate)
 
         setResult(Activity.RESULT_OK, resultIntent)
         finish()

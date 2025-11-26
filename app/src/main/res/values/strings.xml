@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">WhatToDO</string>
+    <string name="app_title">Let\'s get it done...</string>
+    <string name="main_task">Main Task</string>
+    <string name="subtasks">Subtasks</string>
+    <string name="other_tasks">Other Tasks</string>
+    <string name="do_first">Do First\n(Urgent &amp; Important)</string>
+    <string name="schedule">Schedule\n(Not Important)</string>
+    <string name="delegate">Delegate\n(Important)</string>
+    <string name="eliminate">Eliminate\n(Neither)</string>
+    <string name="add_task">Add Task</string>
+    <string name="complete">Complete</string>
 </resources>

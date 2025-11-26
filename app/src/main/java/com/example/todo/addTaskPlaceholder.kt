@@ -110,7 +110,7 @@ class addTaskPlaceholder : AppCompatActivity() {
         val marginTopInPx = (marginTopInDp * resources.displayMetrics.density).toInt()
         layoutParams.setMargins(0, marginTopInPx, 0, 0)
         newDivider.layoutParams = layoutParams
-        newDivider.setBackgroundColor(resources.getColor(R.color.task_divider_color, null)) // Define this color
+        newDivider.setBackgroundColor(getColor(R.color.divider))
         tasksContainer.addView(newDivider)
 
 
