@@ -39,14 +39,13 @@ This system helps you identify what truly matters and take meaningful actions.
 
 
 
-![Screenshot 1](images/image1)
+<p align="center">
+  <img src="images/image1" width="280" />
+  <img src="images/image3" width="280" />
+  <img src="images/image2" width="280" />
+</p>
 
-<br><br>
 
-![Screenshot 2](images/image3)
-
-<br><br>
-![Screenshot 3](images/image2)
 
 
 
