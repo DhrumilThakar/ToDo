@@ -38,12 +38,22 @@ This system helps you identify what truly matters and take meaningful actions.
 ## 📸 Screenshots
 
 
+<p align="center">
+  <img src="images/image1" width="350" />
+</p>
+
+<br><br>
 
 <p align="center">
-  <img src="images/image1" width="280" />
-  <img src="images/image3" width="280" />
-  <img src="images/image2" width="280" />
+  <img src="images/image3" width="350" />
 </p>
+
+<br><br>
+
+<p align="center">
+  <img src="images/image2" width="350" />
+</p>
+
 
 
 
