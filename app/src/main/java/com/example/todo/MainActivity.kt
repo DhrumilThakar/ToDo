@@ -57,9 +57,35 @@ class MainActivity : AppCompatActivity() {
 
     private val addFixedTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            // A task was added, just reload everything to be safe
-            loadTasksFromDatabase()
+            result.data?.let { data ->
+                val taskName = data.getStringExtra("TASK_NAME")
+                val isUrgent = data.getBooleanExtra("IS_URGENT", false)
+                val isImportant = data.getBooleanExtra("IS_IMPORTANT", false)
+                val dueDate = data.getLongExtra("DUE_DATE", 0L)
+
+                if (!taskName.isNullOrBlank()) {
+                    lifecycleScope.launch {
+                        val priority = calculatePriority(isUrgent, isImportant)
+                        when (clickedFixedTaskSourceTag) {
+                            "main_task" -> {
+                                val task = Task(name = taskName, isUrgent = isUrgent, isImportant = isImportant, dueDate = if (dueDate > 0) dueDate else null, isMainTask = true, priority = priority, parentId = null)
+                                taskRepository.insertTask(task)
+                                // **FIX**: Simply reload all data from the database.
+                                // This is the most reliable way to update the UI.
+                                loadTasksFromDatabase()
+                            }
+                            "minor_task_1", "minor_task_2", "minor_task_3" -> {
+                                val task = Task(name = taskName, isUrgent = isUrgent, isImportant = isImportant, dueDate = if (dueDate > 0) dueDate else null, isSubtask = true, priority = priority, parentId = currentMainTaskId)
+                                taskRepository.insertTask(task)
+                                // This part was already correct. Reloading ensures everything is in sync.
+                                loadTasksFromDatabase()
+                            }
+                        }
+                    }
+                }
+            }
         }
+        clickedFixedTaskSourceTag = null
     }
 
     private val addDynamicTaskLauncher: ActivityResultLauncher<Intent> =
@@ -170,18 +196,14 @@ class MainActivity : AppCompatActivity() {
                     if (index < 3) {
                         currentSubtaskIds[index] = subtask.id
                         val (display, button, checkbox) = getSubtaskViews(index)
-
-                        // **FIX**: Get the correct menu button for the current subtask
                         val menuBtn = when (index) {
                             0 -> minorTaskMenuBtn1
                             1 -> minorTaskMenuBtn2
                             else -> minorTaskMenuBtn3
                         }
-
                         updateFixedTaskDisplay(display, subtask.name, button, checkbox, menuBtn)
                         checkbox.isChecked = subtask.isCompleted
                         applyStrikethrough(display, subtask.isCompleted)
-                        // **FIX**: Set the listener on the correct menu button
                         menuBtn.setOnClickListener { showTaskMenu(subtask, it) }
                     }
                 }
@@ -228,15 +250,12 @@ class MainActivity : AppCompatActivity() {
         // Reset Subtasks
         for (i in 0..2) {
             val (display, button, checkbox) = getSubtaskViews(i)
-
-            // **FIX**: Get the correct menu button to hide it
             val menuBtn = when (i) {
                 0 -> minorTaskMenuBtn1
                 1 -> minorTaskMenuBtn2
                 else -> minorTaskMenuBtn3
             }
             menuBtn.visibility = View.GONE // Hide menu
-
             display.visibility = View.GONE
             checkbox.visibility = View.GONE
             button.visibility = View.VISIBLE
@@ -390,7 +409,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // **FIX**: Changed back to return a Triple
     private fun getSubtaskViews(index: Int): Triple<TextView, ImageButton, CheckBox> {
         return when (index) {
             0 -> Triple(minorTaskNameDisplay1, addMinorTaskBtn1, completeMinorTaskCheckBox1)
