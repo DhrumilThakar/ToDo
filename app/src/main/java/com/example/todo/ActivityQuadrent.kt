@@ -25,9 +25,9 @@ class ActivityQuadrent : AppCompatActivity() {
     private lateinit var eliminateContainer: LinearLayout
     
     // Navigation buttons
-    private lateinit var homeButton: ImageButton
-    private lateinit var calendarButton: ImageButton
-    private lateinit var bambooButton: ImageButton
+    private lateinit var homeButton: LinearLayout
+    private lateinit var addTasksButton: LinearLayout
+    private lateinit var quadrent: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,9 +42,9 @@ class ActivityQuadrent : AppCompatActivity() {
         eliminateContainer = findViewById(R.id.eliminate_container)
 
         // Initialize navigation buttons
-        homeButton = findViewById(R.id.home)
-        calendarButton = findViewById(R.id.calendar)
-        bambooButton = findViewById(R.id.bamboo)
+        homeButton = findViewById(R.id.homeBtn)
+        addTasksButton = findViewById(R.id.addNewTaskBtn)
+        quadrent = findViewById(R.id.viewPriorityQuadrantBtn)
 
         setupNavigation()
         loadTasksIntoQuadrants()
@@ -58,11 +58,11 @@ class ActivityQuadrent : AppCompatActivity() {
             finish()
         }
 
-        calendarButton.setOnClickListener {
+        addTasksButton.setOnClickListener {
             Log.d("Navigation", "Calendar clicked")
         }
 
-        bambooButton.setOnClickListener {
+        quadrent.setOnClickListener {
             val intent = Intent(this, BambooTargetActivity::class.java)
             startActivity(intent)
             finish()

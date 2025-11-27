@@ -29,6 +29,8 @@ class AddTaskActivity : AppCompatActivity() {
     private val calendar: Calendar = Calendar.getInstance()
     private var selectedDueDate: Long = 0L
 
+    private var editingTaskId: Long = -1L
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_task)
@@ -42,6 +44,38 @@ class AddTaskActivity : AppCompatActivity() {
         addTaskButton = findViewById(R.id.button_add_task)
         tagUrgent = findViewById(R.id.tag_urgent)
         tagImportant = findViewById(R.id.tag_important)
+
+        // Check if we're editing an existing task
+        editingTaskId = intent.getLongExtra("EDIT_TASK_ID", -1L)
+        if (editingTaskId != -1L) {
+            // Load task data for editing
+            val taskName = intent.getStringExtra("EDIT_TASK_NAME")
+            val isUrgent = intent.getBooleanExtra("EDIT_TASK_URGENT", false)
+            val isImportant = intent.getBooleanExtra("EDIT_TASK_IMPORTANT", false)
+            val dueDate = intent.getLongExtra("EDIT_TASK_DUE_DATE", 0L)
+            
+            taskNameEditText.setText(taskName)
+            
+            if (isUrgent) {
+                urgencyRadioGroup.check(R.id.radio_urgent)
+            } else {
+                urgencyRadioGroup.check(R.id.radio_not_urgent)
+            }
+            
+            if (isImportant) {
+                importanceRadioGroup.check(R.id.radio_important)
+            } else {
+                importanceRadioGroup.check(R.id.radio_not_important)
+            }
+            
+            if (dueDate > 0) {
+                selectedDueDate = dueDate
+                calendar.timeInMillis = dueDate
+                updateDueDateInView()
+            }
+            
+            addTaskButton.text = "Update Task"
+        }
 
         // Set up due date picker
         dueDateTextView.setOnClickListener {
@@ -116,6 +150,9 @@ class AddTaskActivity : AppCompatActivity() {
         val isImportant = importanceRadioGroup.checkedRadioButtonId == R.id.radio_important
 
         val resultIntent = Intent()
+        if (editingTaskId != -1L) {
+            resultIntent.putExtra("EDIT_TASK_ID", editingTaskId)
+        }
         resultIntent.putExtra("TASK_NAME", taskName)
         resultIntent.putExtra("IS_URGENT", isUrgent)
         resultIntent.putExtra("IS_IMPORTANT", isImportant)

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    android:background="#000000"
+    android:background="@color/background"
     tools:context=".MainActivity">
 
     <TextView
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Let's get it done..."
         android:fontFamily="serif-monospace"
-        android:textColor="#E5E5E5"
+        android:textColor="@color/primary_text"
         android:textSize="30sp"
         android:gravity="center"
         android:paddingTop="8dp"
@@ -61,7 +61,7 @@
             android:gravity="center_vertical|start"
             android:paddingStart="12dp"
             android:paddingEnd="12dp"
-            android:textColor="#A1A1AA"
+            android:textColor="@color/primary_text"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="gone"
@@ -75,7 +75,7 @@
             android:id="@+id/complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:buttonTint="#D4C8AE"
+            android:buttonTint="@color/accent"
             android:checked="false"
             android:visibility="gone"
             app:layout_constraintTop_toTopOf="parent"
@@ -109,7 +109,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:text=""
-                android:textColor="#A1A1AA"
+                android:textColor="@color/secondary_text"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone"
@@ -135,7 +135,7 @@
                 android:id="@+id/complete1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#D4C8AE"
+                android:buttonTint="@color/accent"
                 android:checked="false"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_1"
@@ -158,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:text=""
-                android:textColor="#A1A1AA"
+                android:textColor="@color/secondary_text"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone"
@@ -184,7 +184,7 @@
                 android:id="@+id/complete2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#D4C8AE"
+                android:buttonTint="@color/accent"
                 android:checked="false"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_2"
@@ -206,7 +206,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:text=""
-                android:textColor="#A1A1AA"
+                android:textColor="@color/secondary_text"
                 android:textSize="14sp"
                 android:gravity="center"
                 android:visibility="gone"
@@ -232,7 +232,7 @@
                 android:id="@+id/complete3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:buttonTint="#D4C8AE"
+                android:buttonTint="@color/accent"
                 android:checked="false"
                 android:visibility="gone"
                 app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_3"
@@ -284,7 +284,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:text="Add New Task"
-                    android:textColor="#A1A1AA"
+                    android:textColor="@color/secondary_text"
                     android:textSize="16sp" />
             </LinearLayout>
 
@@ -292,7 +292,7 @@
                 android:id="@+id/addTaskDivider"
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
-                android:background="#24283B" />
+                android:background="@color/divider" />
 
         </LinearLayout>
     </ScrollView>
@@ -303,35 +303,89 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="#242443"
-        android:padding="12dp"
+        android:background="@color/background"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        <ImageButton
-            android:id="@+id/home"
+        
+        <!-- Home Button -->
+        <LinearLayout
+            android:id="@+id/homeBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="Home"
-            android:src="@drawable/menu_burger" />
-        <ImageButton
-            android:id="@+id/calendar"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="Home"
+                android:src="@drawable/home"
+                android:scaleType="centerInside"
+                app:tint="@color/primary_text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Home"
+                android:textColor="@color/primary_text"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif-monospace" />
+        </LinearLayout>
+        
+        <!-- Add New Task Button -->
+        <LinearLayout
+            android:id="@+id/addNewTaskBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="Calendar"
-            android:src="@drawable/calender" />
-        <ImageButton
-            android:id="@+id/bamboo"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="Add New Task"
+                android:src="@drawable/rounded_add_24"
+                android:scaleType="centerInside"
+                app:tint="@color/accent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Add Task"
+                android:textColor="@color/accent"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif-monospace" />
+        </LinearLayout>
+        
+        <!-- View Priority Quadrant Button -->
+        <LinearLayout
+            android:id="@+id/viewPriorityQuadrantBtn"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@null"
-            android:contentDescription="List Check / Bamboo"
-            android:src="@drawable/list_check" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="8dp">
+            <ImageView
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:contentDescription="View Priority Quadrant"
+                android:src="@drawable/main_task"
+                android:scaleType="centerInside"
+                app:tint="@color/accent" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Quadrant"
+                android:textColor="@color/accent"
+                android:textSize="10sp"
+                android:layout_marginTop="4dp"
+                android:fontFamily="serif-monospace" />
+        </LinearLayout>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

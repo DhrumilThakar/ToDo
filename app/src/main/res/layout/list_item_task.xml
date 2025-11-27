@@ -1,48 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:gravity="center_vertical"
-    android:paddingVertical="12dp"
-    android:paddingHorizontal="16dp"
-    android:background="#1A1B26">
+    android:layout_margin="8dp"
+    android:id="@+id/task_frame_container">
 
-
-    <TextView
-        android:id="@+id/task_name_display"
-        android:layout_width="0dp"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:layout_marginStart="8dp"
-        android:text="Task Name Placeholder"
-        android:textColor="#F7EEDD"
-        android:textSize="16sp" />
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingVertical="12dp"
+        android:paddingHorizontal="16dp"
+        android:background="@color/background"
+        android:id="@+id/task_item_container"
+        android:layout_margin="2dp">
 
-    <CheckBox
-        android:id="@+id/task_checkbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:buttonTint="#D4C8AE" />
+        <TextView
+            android:id="@+id/task_name_display"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:text="Task Name Placeholder"
+            android:textColor="@color/primary_text"
+            android:textSize="16sp" />
 
-    <!-- Optional: Add Edit/Delete buttons -->
+        <CheckBox
+            android:id="@+id/task_checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:buttonTint="@color/accent" />
 
-    <ImageButton
-        android:id="@+id/edit_task_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_edit"
-        android:layout_marginStart="8dp"
-        android:contentDescription="Edit Task"/>
+        <!-- Optional: Add Edit/Delete buttons -->
 
-    <ImageButton
-        android:id="@+id/delete_task_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackgroundBorderless"
-        android:src="@drawable/ic_delete"
-        android:layout_marginStart="8dp"
-        android:contentDescription="Delete Task"/>
+        <ImageButton
+            android:id="@+id/edit_task_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_edit"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Edit Task"
+            android:tint="@color/primary_text" />
 
-</LinearLayout>
+        <ImageButton
+            android:id="@+id/delete_task_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_delete"
+            android:layout_marginStart="8dp"
+            android:contentDescription="Delete Task"
+            android:tint="@color/highlight" />
+
+    </LinearLayout>
+
+</FrameLayout>

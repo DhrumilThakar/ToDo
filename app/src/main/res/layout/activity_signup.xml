@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
-    android:background="#1A1B26"
+    android:background="@color/background"
     tools:context=".SignupActivity">
 
     <TextView
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="#ffffff"
+        android:textColor="@color/primary_text"
         android:layout_marginTop="32dp"/>
 
     <TextView
@@ -29,7 +29,7 @@
         app:layout_constraintTop_toBottomOf="@id/textViewTitleSignup"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:textColor="#ffffff"
+        android:textColor="@color/primary_text"
         android:layout_marginTop="8dp"/>
 
     <!-- Full Name Input (Optional) -->
@@ -43,7 +43,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="24dp"
-        android:textColorHint="#ffffff"
+        android:textColorHint="@color/primary_text"
         app:startIconDrawable="@drawable/ic_person">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -64,7 +64,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
-        android:textColorHint="#ffffff"
+        android:textColorHint="@color/primary_text"
         app:startIconDrawable="@drawable/ic_email">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -86,7 +86,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         app:passwordToggleEnabled="true"
-        android:textColorHint="#ffffff"
+        android:textColorHint="@color/primary_text"
         app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -108,7 +108,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="16dp"
         app:passwordToggleEnabled="true"
-        android:textColorHint="#ffffff"
+        android:textColorHint="@color/primary_text"
         app:startIconDrawable="@drawable/ic_lock">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -124,7 +124,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="I agree to the Terms and Conditions"
-        android:textColor="#ffffff"
+        android:textColor="@color/primary_text"
         app:layout_constraintTop_toBottomOf="@id/textFieldConfirmPassword"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -156,7 +156,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Already have an account? "
-            android:textColor="#ffffff" />
+            android:textColor="@color/primary_text" />
 
         <TextView
             android:id="@+id/textViewLoginLink"

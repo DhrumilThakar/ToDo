@@ -1,35 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Primary Colors -->
-    <color name="bg">#0B0F1A</color>
-    <color name="surface">#121826</color>
-    <color name="accent">#D4C8AE</color>
-    <color name="muted">#A1A1AA</color>
-    <color name="text">#E5E5E5</color>
-    <color name="divider">#24283B</color>
-    <color name="cream">#F5EFE0</color>
+    <!-- Dark Theme with Teal/Turquoise Accent Color Palette -->
+    <!-- 1. Teal/Turquoise Accent (High-contrast neon-teal) -->
+    <!-- HEX: #00D9FF, RGB: rgb(0, 217, 255), HSL: hsl(188, 100%, 50%) -->
+    <color name="accent">#00D9FF</color>
+    <color name="accent_old">#00D9FF</color>
+    
+    <!-- 2. Dark Background -->
+    <!-- HEX: #0D1117, RGB: rgb(13, 17, 23), HSL: hsl(216, 28%, 7%) -->
+    <color name="background">#0D1117</color>
+    <color name="bg">#0D1117</color>
+    
+    <!-- 3. Surface/Card Background -->
+    <!-- HEX: #161B22, RGB: rgb(22, 27, 34), HSL: hsl(215, 21%, 11%) -->
+    <color name="surface">#161B22</color>
+    
+    <!-- 4. Input Field Background -->
+    <!-- HEX: #21262D, RGB: rgb(33, 38, 45), HSL: hsl(213, 16%, 15%) -->
+    <color name="input_background">#21262D</color>
+    
+    <!-- 5. Primary Text Color -->
+    <!-- HEX: #F0F6FC, RGB: rgb(240, 246, 252), HSL: hsl(210, 67%, 96%) -->
+    <color name="primary_text">#F0F6FC</color>
+    <color name="text">#F0F6FC</color>
+    <color name="white">#F0F6FC</color>
+    <color name="cream">#F0F6FC</color>
+    
+    <!-- 6. Secondary Text Color -->
+    <!-- HEX: #8B949E, RGB: rgb(139, 148, 158), HSL: hsl(213, 7%, 58%) -->
+    <color name="secondary_text">#8B949E</color>
+    <color name="muted">#8B949E</color>
+    <color name="grey">#8B949E</color>
+    
+    <!-- 7. Icon Color -->
+    <!-- HEX: #58A6FF, RGB: rgb(88, 166, 255), HSL: hsl(212, 100%, 67%) -->
+    <color name="icon_color">#58A6FF</color>
+    
+    <!-- Divider Color -->
+    <color name="divider">#30363D</color>
+    
+    <!-- Highlight/Error Color -->
+    <color name="highlight">#F85149</color>
     
     <!-- Quadrant Colors -->
-    <color name="do_first">#FF6B6B</color>       <!-- Red - Urgent & Important -->
+    <color name="do_first">#F85149</color>       <!-- Red - Urgent & Important -->
     <color name="schedule">#FFA500</color>      <!-- Orange - Urgent & Not Important -->
-    <color name="delegate">#4ECDC4</color>      <!-- Teal - Not Urgent & Important -->
-    <color name="eliminate">#95A5A6</color>     <!-- Grey - Neither -->
+    <color name="delegate">#00D9FF</color>      <!-- Neon Teal - Not Urgent & Important -->
+    <color name="eliminate">#8B949E</color>     <!-- Grey - Neither -->
     
     <!-- Accent Colors -->
-    <color name="do_first_light">#FFB3B3</color>
+    <color name="do_first_light">#FF6B6B</color>
     <color name="schedule_light">#FFD580</color>
-    <color name="delegate_light">#A1F0EA</color>
-    <color name="eliminate_light">#C5D1D3</color>
+    <color name="delegate_light">#00FFFF</color>
+    <color name="eliminate_light">#B1BAC4</color>
     
     <!-- Status Colors -->
-    <color name="success">#2ECC71</color>
-    <color name="warning">#F39C12</color>
-    <color name="error">#E74C3C</color>
-    <color name="info">#3498DB</color>
+    <color name="success">#00D9FF</color>
+    <color name="warning">#FFA500</color>
+    <color name="error">#F85149</color>
+    <color name="info">#00D9FF</color>
     
-    <!-- Legacy Colors (for compatibility with existing layouts) -->
-    <color name="white">#FFFFFF</color>
-    <color name="grey">#808080</color>
-    <color name="purple">#800080</color>
-    <color name="purple_700">#7B1FA2</color>
+    <!-- Legacy Colors (for compatibility) -->
+    <color name="purple">#00D9FF</color>
+    <color name="purple_700">#00B8D4</color>
 </resources>
