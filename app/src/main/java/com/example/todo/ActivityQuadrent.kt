@@ -63,9 +63,7 @@ class ActivityQuadrent : AppCompatActivity() {
         }
 
         quadrent.setOnClickListener {
-            val intent = Intent(this, BambooTargetActivity::class.java)
-            startActivity(intent)
-            finish()
+            // Do nothing - already in quadrant view
         }
     }
 
@@ -111,6 +109,8 @@ class ActivityQuadrent : AppCompatActivity() {
         taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
             lifecycleScope.launch {
                 taskRepository.updateTaskCompletion(task.id, isChecked)
+                // Refresh the quadrant view after updating task completion
+                loadTasksIntoQuadrants()
             }
         }
 

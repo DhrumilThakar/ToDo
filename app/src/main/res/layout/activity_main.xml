@@ -261,6 +261,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- The "Add New Task" placeholder will be here -->
             <LinearLayout
                 android:id="@+id/addTaskPlaceholder"
                 android:layout_width="match_parent"
@@ -294,8 +295,11 @@
                 android:layout_height="1dp"
                 android:background="@color/divider" />
 
+            <!-- Dynamically added tasks will go here -->
+
         </LinearLayout>
     </ScrollView>
+
 
     <LinearLayout
         android:id="@+id/navigation"
@@ -308,7 +312,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
-        
+
         <!-- Home Button -->
         <LinearLayout
             android:id="@+id/homeBtn"
@@ -334,7 +338,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="serif-monospace" />
         </LinearLayout>
-        
+
         <!-- Add New Task Button -->
         <LinearLayout
             android:id="@+id/addNewTaskBtn"
@@ -360,7 +364,7 @@
                 android:layout_marginTop="4dp"
                 android:fontFamily="serif-monospace" />
         </LinearLayout>
-        
+
         <!-- View Priority Quadrant Button -->
         <LinearLayout
             android:id="@+id/viewPriorityQuadrantBtn"

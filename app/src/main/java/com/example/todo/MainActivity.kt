@@ -1,6 +1,7 @@
 package com.example.todo
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
@@ -18,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.todo.models.Task
 import com.example.todo.repository.TaskRepository
+import com.example.todo.utils.QuadrantUtils
 import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
@@ -46,11 +49,18 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tasksContainer: LinearLayout
     private lateinit var addTaskPlaceholder: LinearLayout
     private lateinit var addTaskDivider: View
+    private lateinit var scrollViewTasks: ScrollView
 
     // Navigation buttons
     private lateinit var homeButton: LinearLayout
     private lateinit var addNewTaskButton: LinearLayout
     private lateinit var quadrantButton: LinearLayout
+
+    // Quadrant containers
+    private lateinit var doFirstContainer: LinearLayout
+    private lateinit var scheduleContainer: LinearLayout
+    private lateinit var delegateContainer: LinearLayout
+    private lateinit var eliminateContainer: LinearLayout
 
     // Database and repository
     private lateinit var taskRepository: TaskRepository
@@ -154,8 +164,8 @@ class MainActivity : AppCompatActivity() {
                                 priority = priority
                             )
                             val insertedId = taskRepository.insertTask(task)
-                            // Reload tasks to get the actual task with ID from database
-                            loadTasksFromDatabase()
+                            // Reload tasks to get the actual task with ID from database and scroll to bottom
+                            loadTasksFromDatabase(scrollToBottom = true)
                         }
                     }
                 }
@@ -178,11 +188,11 @@ class MainActivity : AppCompatActivity() {
         addMinorTaskBtn1 = findViewById(R.id.add_minor_task_btn_1)
         minorTaskNameDisplay1 = findViewById(R.id.minor_task_name_display_1)
         completeMinorTaskCheckBox1 = findViewById(R.id.complete1)
-        
+
         addMinorTaskBtn2 = findViewById(R.id.add_minor_task_btn_2)
         minorTaskNameDisplay2 = findViewById(R.id.minor_task_name_display_2)
         completeMinorTaskCheckBox2 = findViewById(R.id.complete2)
-        
+
         addMinorTaskBtn3 = findViewById(R.id.add_minor_task_btn_3)
         minorTaskNameDisplay3 = findViewById(R.id.minor_task_name_display_3)
         completeMinorTaskCheckBox3 = findViewById(R.id.complete3)
@@ -191,6 +201,7 @@ class MainActivity : AppCompatActivity() {
         tasksContainer = findViewById(R.id.tasksContainer)
         addTaskPlaceholder = findViewById(R.id.addTaskPlaceholder)
         addTaskDivider = findViewById(R.id.addTaskDivider)
+        scrollViewTasks = findViewById(R.id.scrollViewTasks)
 
         addTaskPlaceholder.setOnClickListener {
             val intent = Intent(this, AddTaskActivity::class.java)
@@ -201,6 +212,7 @@ class MainActivity : AppCompatActivity() {
         homeButton = findViewById(R.id.homeBtn)
         addNewTaskButton = findViewById(R.id.addNewTaskBtn)
         quadrantButton = findViewById(R.id.viewPriorityQuadrantBtn)
+
 
         // Setup click listeners for fixed "+" buttons
         addMainTaskBtn.setOnClickListener { startAddTaskActivityForFixedTask("main_task") }
@@ -233,7 +245,7 @@ class MainActivity : AppCompatActivity() {
         loadTasksFromDatabase()
     }
 
-    private fun loadTasksFromDatabase() {
+    private fun loadTasksFromDatabase(scrollToBottom: Boolean = false) {
         lifecycleScope.launch {
             // Load main task
             val mainTask = taskRepository.getMainTask()
@@ -277,14 +289,24 @@ class MainActivity : AppCompatActivity() {
                 tasksContainer.removeAllViews()
                 tasksContainer.addView(addTaskPlaceholder)
                 tasksContainer.addView(addTaskDivider)
-                
+
                 for (task in tasks) {
                     addNewTaskViewToDynamicList(task.name, task.id, task)
                 }
+
+                // Scroll to bottom if requested
+                if (scrollToBottom) {
+                    scrollViewTasks.post {
+                        scrollViewTasks.fullScroll(View.FOCUS_DOWN)
+                    }
+                }
             }
-            
+
             // Check and cleanup completed tasks
             cleanupCompletedTasks()
+
+            // Load tasks into quadrants
+            loadTasksIntoQuadrants()
         }
     }
 
@@ -308,48 +330,62 @@ class MainActivity : AppCompatActivity() {
 
         val taskNameDisplay = taskView.findViewById<TextView>(R.id.task_name_display)
         val taskCheckbox = taskView.findViewById<CheckBox>(R.id.task_checkbox)
-        val editButton = taskView.findViewById<ImageButton>(R.id.edit_task_btn)
-        val deleteButton = taskView.findViewById<ImageButton>(R.id.delete_task_btn)
+        val menuButton = taskView.findViewById<TextView>(R.id.task_menu_btn)
 
         taskNameDisplay.text = taskName
         taskCheckbox.isChecked = task.isCompleted
         if (task.isCompleted) {
             taskNameDisplay.paintFlags = taskNameDisplay.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
         }
-        
+
         // Store task ID in view tag
         taskView.tag = taskId
 
         setupDynamicCheckBoxListener(taskCheckbox, taskNameDisplay, taskId)
-        
-        // Setup edit button
-        editButton.setOnClickListener {
-            val intent = Intent(this, AddTaskActivity::class.java)
-            intent.putExtra("EDIT_TASK_ID", taskId.toLong())
-            intent.putExtra("EDIT_TASK_NAME", task.name)
-            intent.putExtra("EDIT_TASK_URGENT", task.isUrgent)
-            intent.putExtra("EDIT_TASK_IMPORTANT", task.isImportant)
-            intent.putExtra("EDIT_TASK_DUE_DATE", task.dueDate ?: 0L)
-            editTaskLauncher.launch(intent)
-        }
-        
-        // Setup delete button
-        deleteButton.setOnClickListener {
-            lifecycleScope.launch {
-                val taskToDelete = taskRepository.getTaskById(taskId)
-                if (taskToDelete != null) {
-                    taskRepository.deleteTask(taskToDelete)
-                    tasksContainer.removeView(taskView)
-                    // Also remove divider if exists
-                    val viewIndex = tasksContainer.indexOfChild(taskView)
-                    if (viewIndex < tasksContainer.childCount - 1) {
-                        val nextView = tasksContainer.getChildAt(viewIndex + 1)
-                        if (nextView is View && nextView.height == (1 * resources.displayMetrics.density).toInt()) {
-                            tasksContainer.removeView(nextView)
+
+        // Setup 3-dot menu button
+        menuButton.setOnClickListener {
+            val options = arrayOf("Info", "Edit", "Delete")
+            AlertDialog.Builder(this)
+                .setItems(options) { _, which ->
+                    when (which) {
+                        0 -> { // Info
+                            val infoMessage = "Task: ${task.name}\nUrgent: ${task.isUrgent}\nImportant: ${task.isImportant}\nDue Date: ${task.dueDate?.let { java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.getDefault()).format(java.util.Date(it)) } ?: "None"}"
+                            AlertDialog.Builder(this)
+                                .setTitle("Task Information")
+                                .setMessage(infoMessage)
+                                .setPositiveButton("OK", null)
+                                .show()
+                        }
+                        1 -> { // Edit
+                            val intent = Intent(this, AddTaskActivity::class.java)
+                            intent.putExtra("EDIT_TASK_ID", taskId.toLong())
+                            intent.putExtra("EDIT_TASK_NAME", task.name)
+                            intent.putExtra("EDIT_TASK_URGENT", task.isUrgent)
+                            intent.putExtra("EDIT_TASK_IMPORTANT", task.isImportant)
+                            intent.putExtra("EDIT_TASK_DUE_DATE", task.dueDate ?: 0L)
+                            editTaskLauncher.launch(intent)
+                        }
+                        2 -> { // Delete
+                            lifecycleScope.launch {
+                                val taskToDelete = taskRepository.getTaskById(taskId)
+                                if (taskToDelete != null) {
+                                    taskRepository.deleteTask(taskToDelete)
+                                    tasksContainer.removeView(taskView)
+                                    // Also remove divider if exists
+                                    val viewIndex = tasksContainer.indexOfChild(taskView)
+                                    if (viewIndex < tasksContainer.childCount - 1) {
+                                        val nextView = tasksContainer.getChildAt(viewIndex + 1)
+                                        if (nextView is View && nextView.height == (1 * resources.displayMetrics.density).toInt()) {
+                                            tasksContainer.removeView(nextView)
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
                 }
-            }
+                .show()
         }
 
         val indexOfPlaceholder = tasksContainer.indexOfChild(addTaskPlaceholder)
@@ -400,7 +436,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 textView.paintFlags = textView.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
             }
-            
+
             lifecycleScope.launch {
                 taskRepository.updateTaskCompletion(taskId, isChecked)
                 if (isChecked) {
@@ -410,7 +446,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     private fun calculatePriority(isUrgent: Boolean, isImportant: Boolean): Int {
         return when {
             isUrgent && isImportant -> 1  // DO_FIRST
@@ -419,15 +455,15 @@ class MainActivity : AppCompatActivity() {
             else -> 4  // ELIMINATE (Neither)
         }
     }
-    
+
     private fun cleanupCompletedTasks() {
         lifecycleScope.launch {
             val completedTasks = taskRepository.getAllCompletedTasks()
             if (completedTasks.isNotEmpty()) {
                 val now = System.currentTimeMillis()
                 // Remove completed tasks that have passed their due date
-                val tasksToDelete = completedTasks.filter { 
-                    it.dueDate != null && it.dueDate < now 
+                val tasksToDelete = completedTasks.filter {
+                    it.dueDate != null && it.dueDate < now
                 }
                 for (task in tasksToDelete) {
                     taskRepository.deleteTask(task)
@@ -435,7 +471,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    
+
     // Launcher for editing tasks
     private val editTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -466,5 +502,55 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun loadTasksIntoQuadrants() {
+        lifecycleScope.launch {
+            taskRepository.getAllTasks().collect { tasks ->
+                // Clear all containers
+                doFirstContainer.removeAllViews()
+                scheduleContainer.removeAllViews()
+                delegateContainer.removeAllViews()
+                eliminateContainer.removeAllViews()
+
+                // Group tasks by quadrant
+                val groupedTasks = QuadrantUtils.getTasksGroupedByQuadrant(tasks)
+
+                // Populate each quadrant
+                for ((quadrant, quadrantTasks) in groupedTasks) {
+                    val container = when (quadrant) {
+                        QuadrantUtils.Quadrant.DO_FIRST -> doFirstContainer
+                        QuadrantUtils.Quadrant.SCHEDULE -> scheduleContainer
+                        QuadrantUtils.Quadrant.DELEGATE -> delegateContainer
+                        QuadrantUtils.Quadrant.ELIMINATE -> eliminateContainer
+                    }
+
+                    for (task in quadrantTasks) {
+                        addTaskToQuadrant(container, task)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun addTaskToQuadrant(container: LinearLayout, task: Task) {
+        val inflater = LayoutInflater.from(this)
+        val taskView = inflater.inflate(R.layout.quadrant_task_item, container, false)
+
+        val taskName = taskView.findViewById<TextView>(R.id.task_name)
+        val taskCheckbox = taskView.findViewById<CheckBox>(R.id.task_checkbox)
+
+        taskName.text = task.name
+        taskCheckbox.isChecked = task.isCompleted
+
+        taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
+            lifecycleScope.launch {
+                taskRepository.updateTaskCompletion(task.id, isChecked)
+                // Refresh the quadrant view after updating task completion
+                loadTasksIntoQuadrants()
+            }
+        }
+
+        container.addView(taskView)
     }
 }

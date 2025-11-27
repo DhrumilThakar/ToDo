@@ -2,14 +2,14 @@
 <resources>
     <!-- Dark Theme with Teal/Turquoise Accent Color Palette -->
     <!-- 1. Teal/Turquoise Accent (High-contrast neon-teal) -->
-    <!-- HEX: #00D9FF, RGB: rgb(0, 217, 255), HSL: hsl(188, 100%, 50%) -->
-    <color name="accent">#00D9FF</color>
-    <color name="accent_old">#00D9FF</color>
+    <!-- HEX: #03DAC6, RGB: rgb(3, 218, 198), HSL: hsl(172, 97%, 44%) -->
+    <color name="accent">#03DAC6</color>
+    <color name="accent_old">#03DAC6</color>
     
     <!-- 2. Dark Background -->
-    <!-- HEX: #0D1117, RGB: rgb(13, 17, 23), HSL: hsl(216, 28%, 7%) -->
-    <color name="background">#0D1117</color>
-    <color name="bg">#0D1117</color>
+    <!-- HEX: #1E1624, RGB: rgb(30, 22, 36), HSL: hsl(260, 24%, 11%) -->
+    <color name="background">#1E1624</color>
+    <color name="bg">#1E1624</color>
     
     <!-- 3. Surface/Card Background -->
     <!-- HEX: #161B22, RGB: rgb(22, 27, 34), HSL: hsl(215, 21%, 11%) -->
@@ -20,17 +20,17 @@
     <color name="input_background">#21262D</color>
     
     <!-- 5. Primary Text Color -->
-    <!-- HEX: #F0F6FC, RGB: rgb(240, 246, 252), HSL: hsl(210, 67%, 96%) -->
-    <color name="primary_text">#F0F6FC</color>
-    <color name="text">#F0F6FC</color>
-    <color name="white">#F0F6FC</color>
-    <color name="cream">#F0F6FC</color>
-    
+    <!-- HEX: #F3E5F5, RGB: rgb(243, 229, 245), HSL: hsl(291, 58%, 91%) -->
+    <color name="primary_text">#F3E5F5</color>
+    <color name="text">#F3E5F5</color>
+    <color name="white">#F3E5F5</color>
+    <color name="cream">#F3E5F5</color>
+
     <!-- 6. Secondary Text Color -->
-    <!-- HEX: #8B949E, RGB: rgb(139, 148, 158), HSL: hsl(213, 7%, 58%) -->
-    <color name="secondary_text">#8B949E</color>
-    <color name="muted">#8B949E</color>
-    <color name="grey">#8B949E</color>
+    <!-- HEX: #CFCFCF, RGB: rgb(207, 207, 207), HSL: hsl(0, 0%, 81%) -->
+    <color name="secondary_text">#CFCFCF</color>
+    <color name="muted">#CFCFCF</color>
+    <color name="grey">#CFCFCF</color>
     
     <!-- 7. Icon Color -->
     <!-- HEX: #58A6FF, RGB: rgb(88, 166, 255), HSL: hsl(212, 100%, 67%) -->
@@ -43,10 +43,10 @@
     <color name="highlight">#F85149</color>
     
     <!-- Quadrant Colors -->
-    <color name="do_first">#F85149</color>       <!-- Red - Urgent & Important -->
+    <color name="do_first">#F44336</color>       <!-- Red - Urgent & Important -->
     <color name="schedule">#FFA500</color>      <!-- Orange - Urgent & Not Important -->
-    <color name="delegate">#00D9FF</color>      <!-- Neon Teal - Not Urgent & Important -->
-    <color name="eliminate">#8B949E</color>     <!-- Grey - Neither -->
+    <color name="delegate">#03DAC6</color>      <!-- Neon Teal - Not Urgent & Important -->
+    <color name="eliminate">#CFCFCF</color>     <!-- Grey - Neither -->
     
     <!-- Accent Colors -->
     <color name="do_first_light">#FF6B6B</color>
