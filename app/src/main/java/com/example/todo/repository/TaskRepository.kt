@@ -15,6 +15,10 @@ class TaskRepository(context: Context) {
         taskDao = database.taskDao()
     }
 
+    suspend fun getSubtasksAsList(parentId: Long): List<Task> {
+        return taskDao.getSubtasksFor(parentId)
+    }
+
     fun getAllTasks(): Flow<List<Task>> {
         return taskDao.getAllTasks()
     }
@@ -51,7 +55,8 @@ class TaskRepository(context: Context) {
         return taskDao.getSubtasks()
     }
 
-    fun getDynamicTasks(): Flow<List<Task>> {
+    // FIX: Add the 'suspend' keyword here
+    suspend fun getDynamicTasksAsList(): List<Task> {
         return taskDao.getDynamicTasks()
     }
 
