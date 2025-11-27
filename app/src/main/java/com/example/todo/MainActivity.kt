@@ -24,6 +24,10 @@ import kotlinx.coroutines.launch
 class MainActivity : AppCompatActivity() {
 
     // --- VIEWS ---
+    private lateinit var mainTaskMenuBtn: TextView
+    private lateinit var minorTaskMenuBtn1: TextView
+    private lateinit var minorTaskMenuBtn2: TextView
+    private lateinit var minorTaskMenuBtn3: TextView
     private lateinit var addMainTaskBtn: ImageButton
     private lateinit var mainTaskNameDisplay: TextView
     private lateinit var completeMainTaskCheckBox: CheckBox
@@ -38,7 +42,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var completeMinorTaskCheckBox3: CheckBox
     private lateinit var tasksContainer: LinearLayout
     private lateinit var addTaskPlaceholder: LinearLayout
-    private lateinit var addTaskDivider: View
     private lateinit var scrollViewTasks: ScrollView
     private lateinit var homeButton: LinearLayout
     private lateinit var addNewTaskButton: LinearLayout
@@ -54,71 +57,23 @@ class MainActivity : AppCompatActivity() {
 
     private val addFixedTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let { data ->
-                val taskName = data.getStringExtra("TASK_NAME")
-                val isUrgent = data.getBooleanExtra("IS_URGENT", false)
-                val isImportant = data.getBooleanExtra("IS_IMPORTANT", false)
-                val dueDate = data.getLongExtra("DUE_DATE", 0L)
-
-                if (!taskName.isNullOrBlank()) {
-                    lifecycleScope.launch {
-                        val priority = calculatePriority(isUrgent, isImportant)
-                        when (clickedFixedTaskSourceTag) {
-                            "main_task" -> {
-                                val task = Task(name = taskName, isUrgent = isUrgent, isImportant = isImportant, dueDate = if (dueDate > 0) dueDate else null, isMainTask = true, priority = priority, parentId = null)
-                                val id = taskRepository.insertTask(task)
-                                currentMainTaskId = id
-                                updateFixedTaskDisplay(mainTaskNameDisplay, taskName, addMainTaskBtn, completeMainTaskCheckBox)
-                            }
-                            "minor_task_1", "minor_task_2", "minor_task_3" -> {
-                                val task = Task(name = taskName, isUrgent = isUrgent, isImportant = isImportant, dueDate = if (dueDate > 0) dueDate else null, isSubtask = true, priority = priority, parentId = currentMainTaskId)
-                                val id = taskRepository.insertTask(task)
-                                val taskIndex = clickedFixedTaskSourceTag!!.last().digitToInt() - 1
-                                currentSubtaskIds[taskIndex] = id
-                                val display = getSubtaskViews(taskIndex).first
-                                val button = getSubtaskViews(taskIndex).second
-                                val checkbox = getSubtaskViews(taskIndex).third
-                                updateFixedTaskDisplay(display, taskName, button, checkbox)
-                            }
-                        }
-                    }
-                }
-            }
+            // A task was added, just reload everything to be safe
+            loadTasksFromDatabase()
         }
-        clickedFixedTaskSourceTag = null
     }
 
     private val addDynamicTaskLauncher: ActivityResultLauncher<Intent> =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                result.data?.let { data ->
-                    val taskName = data.getStringExtra("TASK_NAME")
-                    val isUrgent = data.getBooleanExtra("IS_URGENT", false)
-                    val isImportant = data.getBooleanExtra("IS_IMPORTANT", false)
-                    val dueDate = data.getLongExtra("DUE_DATE", 0L)
-
-                    if (!taskName.isNullOrBlank()) {
-                        lifecycleScope.launch {
-                            val priority = calculatePriority(isUrgent, isImportant)
-                            val task = Task(name = taskName, isUrgent = isUrgent, isImportant = isImportant, dueDate = if (dueDate > 0) dueDate else null, isMainTask = false, isSubtask = false, priority = priority, parentId = null)
-                            taskRepository.insertTask(task)
-                            loadDynamicTasks(scrollToBottom = true)
-                        }
-                    }
-                }
+                // A dynamic task was added, reload the dynamic list and scroll
+                loadDynamicTasks(scrollToBottom = true)
             }
         }
 
     private val editTaskLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.let { data ->
-                val taskId = data.getLongExtra("EDIT_TASK_ID", -1L)
-                if (taskId != -1L) {
-                    lifecycleScope.launch {
-                        loadTasksFromDatabase()
-                    }
-                }
-            }
+            // A task was edited, reload everything to reflect changes
+            loadTasksFromDatabase()
         }
     }
 
@@ -143,27 +98,34 @@ class MainActivity : AppCompatActivity() {
     private fun initializeViews() {
         taskRepository = TaskRepository(this)
 
+        // Main Task Views
         addMainTaskBtn = findViewById(R.id.add_main_task_btn)
         mainTaskNameDisplay = findViewById(R.id.main_task_name_display)
         completeMainTaskCheckBox = findViewById(R.id.complete)
+        mainTaskMenuBtn = findViewById(R.id.main_task_menu_btn)
 
+        // Subtask 1 Views
         addMinorTaskBtn1 = findViewById(R.id.add_minor_task_btn_1)
         minorTaskNameDisplay1 = findViewById(R.id.minor_task_name_display_1)
         completeMinorTaskCheckBox1 = findViewById(R.id.complete1)
+        minorTaskMenuBtn1 = findViewById(R.id.minor_task_menu_btn_1)
 
+        // Subtask 2 Views
         addMinorTaskBtn2 = findViewById(R.id.add_minor_task_btn_2)
         minorTaskNameDisplay2 = findViewById(R.id.minor_task_name_display_2)
         completeMinorTaskCheckBox2 = findViewById(R.id.complete2)
+        minorTaskMenuBtn2 = findViewById(R.id.minor_task_menu_btn_2)
 
+        // Subtask 3 Views
         addMinorTaskBtn3 = findViewById(R.id.add_minor_task_btn_3)
         minorTaskNameDisplay3 = findViewById(R.id.minor_task_name_display_3)
         completeMinorTaskCheckBox3 = findViewById(R.id.complete3)
+        minorTaskMenuBtn3 = findViewById(R.id.minor_task_menu_btn_3)
 
+        // Other Views
         tasksContainer = findViewById(R.id.tasksContainer)
         addTaskPlaceholder = findViewById(R.id.addTaskPlaceholder)
-        addTaskDivider = findViewById(R.id.addTaskDivider)
         scrollViewTasks = findViewById(R.id.scrollViewTasks)
-
         homeButton = findViewById(R.id.homeBtn)
         addNewTaskButton = findViewById(R.id.addNewTaskBtn)
         quadrantButton = findViewById(R.id.viewPriorityQuadrantBtn)
@@ -176,13 +138,13 @@ class MainActivity : AppCompatActivity() {
         addMinorTaskBtn2.setOnClickListener { handleSubtaskAddClick("minor_task_2") }
         addMinorTaskBtn3.setOnClickListener { handleSubtaskAddClick("minor_task_3") }
 
-        // CheckBox Listeners
+        // CheckBox Listeners for fixed tasks
         setupCheckBoxListener(completeMainTaskCheckBox, mainTaskNameDisplay, 0)
         setupCheckBoxListener(completeMinorTaskCheckBox1, minorTaskNameDisplay1, 1)
         setupCheckBoxListener(completeMinorTaskCheckBox2, minorTaskNameDisplay2, 2)
         setupCheckBoxListener(completeMinorTaskCheckBox3, minorTaskNameDisplay3, 3)
 
-        // Navigation
+        // Navigation and Dynamic Task Add
         homeButton.setOnClickListener { Toast.makeText(this, "Home", Toast.LENGTH_SHORT).show() }
         addNewTaskButton.setOnClickListener { addDynamicTaskLauncher.launch(Intent(this, AddTaskActivity::class.java)) }
         quadrantButton.setOnClickListener { startActivity(Intent(this, ActivityQuadrent::class.java)) }
@@ -197,9 +159,10 @@ class MainActivity : AppCompatActivity() {
             // Load main task
             taskRepository.getMainTask()?.let { mainTask ->
                 currentMainTaskId = mainTask.id
-                updateFixedTaskDisplay(mainTaskNameDisplay, mainTask.name, addMainTaskBtn, completeMainTaskCheckBox)
+                updateFixedTaskDisplay(mainTaskNameDisplay, mainTask.name, addMainTaskBtn, completeMainTaskCheckBox, mainTaskMenuBtn)
                 completeMainTaskCheckBox.isChecked = mainTask.isCompleted
                 applyStrikethrough(mainTaskNameDisplay, mainTask.isCompleted)
+                mainTaskMenuBtn.setOnClickListener { showTaskMenu(mainTask, it) }
 
                 // Load subtasks for the main task
                 val subtasks = taskRepository.getSubtasksAsList(mainTask.id)
@@ -207,9 +170,19 @@ class MainActivity : AppCompatActivity() {
                     if (index < 3) {
                         currentSubtaskIds[index] = subtask.id
                         val (display, button, checkbox) = getSubtaskViews(index)
-                        updateFixedTaskDisplay(display, subtask.name, button, checkbox)
+
+                        // **FIX**: Get the correct menu button for the current subtask
+                        val menuBtn = when (index) {
+                            0 -> minorTaskMenuBtn1
+                            1 -> minorTaskMenuBtn2
+                            else -> minorTaskMenuBtn3
+                        }
+
+                        updateFixedTaskDisplay(display, subtask.name, button, checkbox, menuBtn)
                         checkbox.isChecked = subtask.isCompleted
                         applyStrikethrough(display, subtask.isCompleted)
+                        // **FIX**: Set the listener on the correct menu button
+                        menuBtn.setOnClickListener { showTaskMenu(subtask, it) }
                     }
                 }
             }
@@ -221,12 +194,16 @@ class MainActivity : AppCompatActivity() {
     private fun loadDynamicTasks(scrollToBottom: Boolean = false) {
         lifecycleScope.launch {
             val tasks = taskRepository.getDynamicTasksAsList()
-            // Efficiently remove old views
-            val viewsToRemove = (0 until tasksContainer.childCount).mapNotNull {
-                val child = tasksContainer.getChildAt(it)
-                if (child.id != R.id.addTaskPlaceholder && child.id != R.id.addTaskDivider) child else null
+            // Efficiently remove old dynamic task views
+            val viewsToRemove = mutableListOf<View>()
+            for (i in 0 until tasksContainer.childCount) {
+                val child = tasksContainer.getChildAt(i)
+                if (child.tag != null && child.tag is Long) {
+                    viewsToRemove.add(child)
+                }
             }
             viewsToRemove.forEach { tasksContainer.removeView(it) }
+
 
             // Add new views
             tasks.forEach { addNewTaskViewToDynamicList(it) }
@@ -241,6 +218,7 @@ class MainActivity : AppCompatActivity() {
         // Reset Main Task
         mainTaskNameDisplay.visibility = View.GONE
         completeMainTaskCheckBox.visibility = View.GONE
+        mainTaskMenuBtn.visibility = View.GONE // Hide main menu
         addMainTaskBtn.visibility = View.VISIBLE
         mainTaskNameDisplay.text = ""
         completeMainTaskCheckBox.isChecked = false
@@ -250,6 +228,15 @@ class MainActivity : AppCompatActivity() {
         // Reset Subtasks
         for (i in 0..2) {
             val (display, button, checkbox) = getSubtaskViews(i)
+
+            // **FIX**: Get the correct menu button to hide it
+            val menuBtn = when (i) {
+                0 -> minorTaskMenuBtn1
+                1 -> minorTaskMenuBtn2
+                else -> minorTaskMenuBtn3
+            }
+            menuBtn.visibility = View.GONE // Hide menu
+
             display.visibility = View.GONE
             checkbox.visibility = View.GONE
             button.visibility = View.VISIBLE
@@ -269,7 +256,7 @@ class MainActivity : AppCompatActivity() {
         taskNameDisplay.text = task.name
         taskCheckbox.isChecked = task.isCompleted
         applyStrikethrough(taskNameDisplay, task.isCompleted)
-        taskView.tag = task.id
+        taskView.tag = task.id // Set tag for identification
 
         setupDynamicCheckBoxListener(taskCheckbox, taskNameDisplay, task.id)
         menuButton.setOnClickListener { showTaskMenu(task, it) }
@@ -290,13 +277,22 @@ class MainActivity : AppCompatActivity() {
 
     private fun startAddTaskActivityForFixedTask(sourceTag: String) {
         clickedFixedTaskSourceTag = sourceTag
-        addFixedTaskLauncher.launch(Intent(this, AddTaskActivity::class.java).putExtra("SOURCE_TAG", sourceTag))
+        val intent = Intent(this, AddTaskActivity::class.java).putExtra("SOURCE_TAG", sourceTag)
+        addFixedTaskLauncher.launch(intent)
     }
 
-    private fun updateFixedTaskDisplay(textView: TextView, taskName: String, addButton: ImageButton, checkBox: CheckBox) {
+    // This function signature is correct
+    private fun updateFixedTaskDisplay(
+        textView: TextView,
+        taskName: String,
+        addButton: ImageButton,
+        checkBox: CheckBox,
+        menuButton: TextView
+    ) {
         textView.text = taskName
         textView.visibility = View.VISIBLE
         checkBox.visibility = View.VISIBLE
+        menuButton.visibility = View.VISIBLE
         addButton.visibility = View.GONE
     }
 
@@ -361,7 +357,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showTaskInfo(task: Task) {
-        // Implementation for showing task info can be added here
+        val dueDateStr = task.dueDate?.let {
+            java.text.SimpleDateFormat("MMM dd, yyyy", java.util.Locale.getDefault()).format(java.util.Date(it))
+        } ?: "Not set"
+        val priorityName = when (task.priority) {
+            1 -> "Do First"
+            2 -> "Schedule"
+            3 -> "Delegate"
+            else -> "Eliminate"
+        }
+        val infoMessage = """
+            Status: ${if (task.isCompleted) "Completed" else "Pending"}
+            Urgent: ${if (task.isUrgent) "Yes" else "No"}
+            Important: ${if (task.isImportant) "Yes" else "No"}
+            Priority: $priorityName
+            Due Date: $dueDateStr
+        """.trimIndent()
+
+        AlertDialog.Builder(this)
+            .setTitle(task.name)
+            .setMessage(infoMessage)
+            .setPositiveButton("OK", null)
+            .show()
     }
 
     private fun calculatePriority(isUrgent: Boolean, isImportant: Boolean): Int {
@@ -373,6 +390,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // **FIX**: Changed back to return a Triple
     private fun getSubtaskViews(index: Int): Triple<TextView, ImageButton, CheckBox> {
         return when (index) {
             0 -> Triple(minorTaskNameDisplay1, addMinorTaskBtn1, completeMinorTaskCheckBox1)

@@ -4,40 +4,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp"
     android:background="@color/background"
+    android:padding="16dp"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/titleTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Let's get it done..."
         android:fontFamily="serif-monospace"
-        android:textColor="@color/primary_text"
-        android:textSize="30sp"
         android:gravity="center"
         android:paddingTop="8dp"
         android:paddingBottom="16dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="Let's get it done..."
+        android:textColor="@color/primary_text"
+        android:textSize="30sp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/mainTaskLayout"
-        android:layout_width="348dp"
-        android:layout_height="139dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:background="@drawable/rectangle"
         android:padding="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/minorTasksLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.30"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/titleTextView">
 
-        <!-- This button should only be visible when there is NO task. -->
-        <!-- Its constraints are simple: center in parent. -->
+        <!-- Add Button (centered) -->
         <ImageButton
             android:id="@+id/add_main_task_btn"
             android:layout_width="77dp"
@@ -52,212 +49,255 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- This TextView is for displaying the task. -->
-        <!-- It's constrained to the parent's start and the CheckBox's start. -->
-
+        <!-- Task Name Display -->
         <TextView
             android:id="@+id/main_task_name_display"
-            android:layout_width="187dp"
-            android:layout_height="98dp"
-            android:layout_marginTop="4dp"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
             android:gravity="center_vertical|start"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
+            android:maxLines="3"
             android:textColor="@color/primary_text"
             android:textSize="18sp"
             android:textStyle="bold"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/complete"
-            app:layout_constraintHorizontal_bias="0.684"
+            app:layout_constraintEnd_toStartOf="@+id/main_task_menu_btn"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/add_main_task_btn"
-            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="This is the main task name" />
+
+        <!-- 3-Dot Menu Button -->
+        <TextView
+            android:id="@+id/main_task_menu_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:text="&#8942;"
+            android:textColor="@color/secondary_text"
+            android:textSize="24sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/complete"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
+        <!-- Checkbox -->
         <CheckBox
             android:id="@+id/complete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:buttonTint="@color/accent"
-            android:checked="false"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <LinearLayout
         android:id="@+id/minorTasksLayout"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:baselineAligned="false"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/mainTaskLayout"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.20"
-        app:layout_constraintBottom_toTopOf="@+id/scrollViewTasks"
-        android:layout_marginTop="16dp">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/mainTaskLayout">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Minor Task 1 -->
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
             android:layout_weight="1"
-            android:layout_marginEnd="8dp"
             android:background="@drawable/rectangle"
             android:padding="12dp">
-            <TextView
-                android:id="@+id/minor_task_name_display_1"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text=""
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/add_minor_task_btn_1"
-                tools:visibility="visible"/>
+
             <ImageButton
                 android:id="@+id/add_minor_task_btn_1"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:background="@drawable/circle_light_cream"
-                android:src="@drawable/rounded_add_24"
-                android:scaleType="fitCenter"
                 android:contentDescription="Add Minor Task 1"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:scaleType="fitCenter"
+                android:src="@drawable/rounded_add_24"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/minor_task_name_display_1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/minor_task_menu_btn_1"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Subtask 1" />
+
+            <TextView
+                android:id="@+id/minor_task_menu_btn_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:padding="4dp"
+                android:text="&#8942;"
+                android:textColor="@color/secondary_text"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <CheckBox
                 android:id="@+id/complete1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/add_minor_task_btn_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
                 android:buttonTint="@color/accent"
-                android:checked="false"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_1"
-                app:layout_constraintStart_toStartOf="@id/add_minor_task_btn_1"
-                app:layout_constraintEnd_toEndOf="@id/add_minor_task_btn_1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                tools:visibility="visible" />
+        </RelativeLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Minor Task 2 -->
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:layout_marginEnd="4dp"
+            android:layout_weight="1"
             android:background="@drawable/rectangle"
             android:padding="12dp">
-            <TextView
-                android:id="@+id/minor_task_name_display_2"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text=""
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/add_minor_task_btn_2"
-                tools:visibility="visible" />
+
             <ImageButton
                 android:id="@+id/add_minor_task_btn_2"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:background="@drawable/circle_light_cream"
-                android:src="@drawable/rounded_add_24"
-                android:scaleType="fitCenter"
                 android:contentDescription="Add Minor Task 2"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:scaleType="fitCenter"
+                android:src="@drawable/rounded_add_24"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/minor_task_name_display_2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/minor_task_menu_btn_2"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Subtask 2"/>
+
+            <TextView
+                android:id="@+id/minor_task_menu_btn_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:padding="4dp"
+                android:text="&#8942;"
+                android:textColor="@color/secondary_text"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <CheckBox
                 android:id="@+id/complete2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/add_minor_task_btn_2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
                 android:buttonTint="@color/accent"
-                android:checked="false"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_2"
-                app:layout_constraintStart_toStartOf="@id/add_minor_task_btn_2"
-                app:layout_constraintEnd_toEndOf="@id/add_minor_task_btn_2"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                tools:visibility="visible" />
+        </RelativeLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <!-- Minor Task 3 -->
+        <RelativeLayout
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
             android:layout_weight="1"
-            android:layout_marginStart="8dp"
             android:background="@drawable/rectangle"
             android:padding="12dp">
-            <TextView
-                android:id="@+id/minor_task_name_display_3"
-                android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:text=""
-                android:textColor="@color/secondary_text"
-                android:textSize="14sp"
-                android:gravity="center"
-                android:visibility="gone"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintBottom_toTopOf="@+id/add_minor_task_btn_3"
-                tools:visibility="visible"/>
+
             <ImageButton
                 android:id="@+id/add_minor_task_btn_3"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                android:layout_centerInParent="true"
                 android:background="@drawable/circle_light_cream"
-                android:src="@drawable/rounded_add_24"
                 android:contentDescription="Add Minor Task 3"
                 android:scaleType="fitCenter"
-                android:visibility="visible"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
+                android:src="@drawable/rounded_add_24"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/minor_task_name_display_3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/minor_task_menu_btn_3"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="2"
+                android:textColor="@color/secondary_text"
+                android:textSize="14sp"
+                android:visibility="gone"
+                tools:text="Subtask 3"/>
+
+            <TextView
+                android:id="@+id/minor_task_menu_btn_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:padding="4dp"
+                android:text="&#8942;"
+                android:textColor="@color/secondary_text"
+                android:textSize="20sp"
+                android:visibility="gone"
+                tools:visibility="visible" />
+
             <CheckBox
                 android:id="@+id/complete3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/add_minor_task_btn_3"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
                 android:buttonTint="@color/accent"
-                android:checked="false"
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@id/add_minor_task_btn_3"
-                app:layout_constraintStart_toStartOf="@id/add_minor_task_btn_3"
-                app:layout_constraintEnd_toEndOf="@id/add_minor_task_btn_3"
-                app:layout_constraintBottom_toBottomOf="parent"
-                tools:visibility="visible"/>
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                tools:visibility="visible" />
+        </RelativeLayout>
     </LinearLayout>
 
     <ScrollView
         android:id="@+id/scrollViewTasks"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@id/minorTasksLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/navigation"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp">
+        android:layout_marginBottom="16dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toTopOf="@+id/navigation"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/minorTasksLayout">
 
         <LinearLayout
             android:id="@+id/tasksContainer"
@@ -270,19 +310,19 @@
                 android:id="@+id/addTaskPlaceholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingVertical="12dp"
                 android:background="?attr/selectableItemBackground"
                 android:clickable="true"
-                android:focusable="true">
+                android:focusable="true"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingVertical="12dp">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/rounded_add_24"
                     android:layout_marginStart="16dp"
-                    android:contentDescription="Add New Task Icon"/>
+                    android:contentDescription="Add New Task Icon"
+                    android:src="@drawable/rounded_add_24" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -307,12 +347,13 @@
 
     <LinearLayout
         android:id="@+id/navigation"
-        android:layout_width="386dp"
-        android:layout_height="117dp"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:background="@color/background"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -334,7 +375,6 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/home"
                 app:tint="@color/primary_text" />
-
 
         </LinearLayout>
 
