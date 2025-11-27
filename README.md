@@ -2,7 +2,7 @@
 
 A powerful yet minimal To-Do management application built in Kotlin using Android Studio, designed to help users plan their day smartly and productively.
 
-[<img src="https://tse2.mm.bing.net/th/id/OIP.2NoVmaHC4ICETmZHvtwehgAAAA" width="50"/>](https://github.com/user/repository/subscription) 
+[<img src="https://tse2.mm.bing.net/th/id/OIP.2NoVmaHC4ICETmZHvtwehgAAAA" width="50"/>](https://github.com/DhrumilThakar/ToDo/releases/download/v1.0.0/app-debug.apk)
 
 *INSTALL APK*
 
@@ -37,11 +37,26 @@ This system helps you identify what truly matters and take meaningful actions.
 
 ## 📸 Screenshots
 
-(Add your screenshots in place of the images below)
 
-![Screenshot 1](images/image1.png)
-![Screenshot 2](images/image2.png)
-![Screenshot 3](images/image3.png)
+<p align="center">
+  <img src="images/image1" width="350" />
+</p>
+
+<br><br>
+
+<p align="center">
+  <img src="images/image3" width="350" />
+</p>
+
+<br><br>
+
+<p align="center">
+  <img src="images/image2" width="350" />
+</p>
+
+
+
+
 
 
 ## 🏗 Tech Stack
@@ -70,7 +85,7 @@ Planned enhancements for upcoming versions:
 ## Clone the repository for local run/ editting
 
 
-git clone <git http link>
+[git clone](https://github.com/DhrumilThakar/ToDo.git)
 
 
 Open in Android Studio ➜ Sync Gradle ➜ Run on Emulator / Device
