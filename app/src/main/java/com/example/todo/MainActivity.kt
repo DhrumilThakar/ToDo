@@ -23,7 +23,6 @@ import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    // --- VIEWS ---
     private lateinit var mainTaskMenuBtn: TextView
     private lateinit var minorTaskMenuBtn1: TextView
     private lateinit var minorTaskMenuBtn2: TextView
