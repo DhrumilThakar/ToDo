@@ -1,237 +1,359 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:padding="24dp">
+    android:fillViewport="true">
 
-    <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Add a New Task"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/primary_text"
-        android:layout_marginBottom="24dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:padding="24dp">
 
-    <LinearLayout
-        android:id="@+id/taskNameLayout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@drawable/rectangle"
-        android:gravity="center_vertical"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        <!-- Header -->
+        <TextView
+            android:id="@+id/headerTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="New task"
+            android:textColor="@color/primary_text"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/cancelButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="@color/accent"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@id/headerTitle"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/headerTitle" />
+
+        <!-- Task Name -->
+        <TextView
+            android:id="@+id/taskNameLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="Task name"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/headerTitle" />
 
         <EditText
             android:id="@+id/edit_text_task_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Enter task title"
-            android:textColorHint="#aaaaaa"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_bg"
+            android:hint="What needs to be done?"
             android:inputType="textCapSentences"
-            android:padding="12dp"
-            android:background="@null"
-            android:textColor="@color/primary_text"/>
-
-        <TextView
-            android:id="@+id/tag_urgent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[U]"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:paddingStart="4dp"
-            android:paddingEnd="4dp"
-            android:visibility="gone" />
-
-        <TextView
-            android:id="@+id/tag_important"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="[I]"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:paddingStart="4dp"
-            android:paddingEnd="8dp"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/urgencyTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rectangle"
-        android:padding="12dp"
-        android:text="Urgency:"
-        android:textColor="@color/primary_text"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/taskNameLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/radio_group_urgency"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/urgencyTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/radio_not_urgent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/grey"
-            android:checked="true"
-            android:text="Not Urgent"
-            android:textColor="@color/primary_text" />
-
-        <RadioButton
-            android:id="@+id/radio_urgent"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/grey"
-            android:text="Urgent"
-            android:textColor="@color/white" />
-    </RadioGroup>
-
-    <TextView
-        android:id="@+id/importanceTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:background="@drawable/rectangle"
-        android:padding="12dp"
-        android:text="Importance:"
-        android:textColor="@color/primary_text"
-        android:textSize="16sp"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_urgency"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <RadioGroup
-        android:id="@+id/radio_group_importance"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/importanceTitle"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/radio_not_important"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/grey"
-            android:checked="true"
-            android:text="Not Important"
-            android:textColor="@color/primary_text" />
-
-        <RadioButton
-            android:id="@+id/radio_important"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:buttonTint="@color/grey"
-            android:text="Important"
-            android:textColor="@color/white" />
-    </RadioGroup>
-
-    <EditText
-        android:id="@+id/description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:hint="Enter task description"
-        android:textColorHint="#aaaaaa"
-        android:inputType="textCapSentences"
-        android:padding="12dp"
-        android:background="@drawable/rectangle"
-        android:textColor="@color/primary_text"
-        app:layout_constraintTop_toBottomOf="@id/radio_group_importance"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/text_view_due_date"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Select Due Date"
-        android:textSize="16sp"
-        android:padding="12dp"
-        android:textColor="@color/primary_text"
-        android:background="@drawable/rectangle"
-        android:clickable="true"
-        android:drawableEnd="@drawable/ic_calender"
-        android:drawableTint="@color/primary_text"
-        android:gravity="center_vertical"
-        app:layout_constraintTop_toBottomOf="@id/description"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/sub_category_display_layout"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="16dp"
-        app:layout_constraintTop_toBottomOf="@id/text_view_due_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Determined Quadrant:"
-            android:textSize="16sp"
+            android:padding="16dp"
             android:textColor="@color/primary_text"
-            android:layout_marginBottom="8dp"/>
+            android:textColorHint="#4DFFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/taskNameLabel" />
+
+        <!-- Description -->
+        <TextView
+            android:id="@+id/descriptionLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Description (optional)"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_text_task_name" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_bg"
+            android:gravity="top"
+            android:hint="Add details..."
+            android:inputType="textMultiLine"
+            android:padding="16dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="#4DFFFFFF"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/descriptionLabel" />
+
+        <!-- Urgency -->
+        <TextView
+            android:id="@+id/urgencyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Urgency"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description" />
+
+        <LinearLayout
+            android:id="@+id/urgencyContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/urgencyLabel">
+
+            <TextView
+                android:id="@+id/btn_not_urgent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Not urgent"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/btn_urgent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Urgent"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <!-- Importance -->
+        <TextView
+            android:id="@+id/importanceLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Importance"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/urgencyContainer" />
+
+        <LinearLayout
+            android:id="@+id/importanceContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/importanceLabel">
+
+            <TextView
+                android:id="@+id/btn_not_important"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Not important"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/btn_important"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="Important"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <!-- Quadrant Detected -->
+        <TextView
+            android:id="@+id/quadrantLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Quadrant detected"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/importanceContainer" />
+
+        <LinearLayout
+            android:id="@+id/quadrantDetectedCard"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/quadrant_detected_bg"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/quadrantLabel">
+
+            <FrameLayout
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="@drawable/circle_light_cream"
+                android:backgroundTint="#33FF6B6B">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="!"
+                    android:textColor="#FF6B6B"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/detectedQuadrantTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Do first"
+                    android:textColor="@color/primary_text"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/detectedQuadrantDesc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Urgent and important"
+                    android:textColor="@color/secondary_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Reminder -->
+        <TextView
+            android:id="@+id/reminderLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Reminder"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/quadrantDetectedCard" />
+
+        <LinearLayout
+            android:id="@+id/reminderContainer"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminderLabel">
+
+            <TextView
+                android:id="@+id/reminder_none"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="None"
+                android:textColor="@color/accent" />
+
+            <TextView
+                android:id="@+id/reminder_1hr"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="4dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="1 hr before"
+                android:textColor="@color/secondary_text" />
+
+            <TextView
+                android:id="@+id/reminder_1day"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/button_selectable_bg"
+                android:gravity="center"
+                android:padding="12dp"
+                android:text="1 day before"
+                android:textColor="@color/secondary_text" />
+        </LinearLayout>
+
+        <!-- Due Date -->
+        <TextView
+            android:id="@+id/dueDateLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="Due date"
+            android:textColor="@color/secondary_text"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/reminderContainer" />
 
         <TextView
-            android:id="@+id/text_view_determined_category"
-            android:layout_width="match_parent"
+            android:id="@+id/text_view_due_date"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/edittext_bg"
+            android:drawableEnd="@drawable/calender"
+            android:drawableTint="@color/secondary_text"
+            android:gravity="center_vertical"
+            android:hint="dd-mm-yyyy"
+            android:padding="16dp"
+            android:textColor="@color/primary_text"
+            android:textColorHint="#4DFFFFFF"
             android:textSize="16sp"
-            android:textColor="@color/purple"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/dueDateLabel" />
+
+        <Button
+            android:id="@+id/button_add_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:backgroundTint="@color/accent"
+            android:padding="16dp"
+            android:text="Add Task"
+            android:textColor="#1E1624"
             android:textStyle="bold"
-            android:padding="12dp"
-            android:background="@drawable/rectangle"
-            android:text="Not Urgent &amp; Not Important" />
-    </LinearLayout>
+            app:cornerRadius="12dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/text_view_due_date"
+            app:layout_constraintBottom_toBottomOf="parent" />
 
-    <Button
-        android:id="@+id/button_add_task"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Add Task"
-        android:backgroundTint="@color/purple"
-        android:textColor="@color/primary_text"
-        android:padding="12dp"
-        android:layout_marginTop="24dp"
-        app:layout_constraintTop_toBottomOf="@id/sub_category_display_layout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

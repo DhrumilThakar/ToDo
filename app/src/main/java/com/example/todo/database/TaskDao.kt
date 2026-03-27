@@ -37,14 +37,12 @@ interface TaskDao {
     @Query("SELECT * FROM tasks WHERE isSubtask = 1 ORDER BY id ASC")
     fun getSubtasks(): Flow<List<Task>>
 
-    // DELETED the duplicate non-suspend function.
-    // @Query("SELECT * FROM tasks WHERE isMainTask = 0 AND isSubtask = 0 ORDER BY priority ASC")
-    // fun getDynamicTasks(): List<Task>
-
     @Query("SELECT * FROM tasks WHERE isCompleted = 1")
     suspend fun getAllCompletedTasks(): List<Task>
 
-    // KEEP this suspend version which is used by the repository.
+    @Query("SELECT COUNT(*) FROM tasks WHERE isCompleted = 1")
+    suspend fun getCompletedTasksCount(): Int
+
     @Query("SELECT * FROM tasks WHERE isMainTask = 0 AND isSubtask = 0 ORDER BY id DESC")
     suspend fun getDynamicTasks(): List<Task>
 

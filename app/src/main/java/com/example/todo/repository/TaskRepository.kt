@@ -36,6 +36,7 @@ class TaskRepository(context: Context) {
     }
 
     suspend fun deleteTask(task: Task) {
+        // Room uses the primary key to delete, ensure the task object has the correct ID
         taskDao.delete(task)
     }
 
@@ -55,13 +56,16 @@ class TaskRepository(context: Context) {
         return taskDao.getSubtasks()
     }
 
-    // FIX: Add the 'suspend' keyword here
     suspend fun getDynamicTasksAsList(): List<Task> {
         return taskDao.getDynamicTasks()
     }
 
     suspend fun getAllCompletedTasks(): List<Task> {
         return taskDao.getAllCompletedTasks()
+    }
+
+    suspend fun getCompletedTasksCount(): Int {
+        return taskDao.getCompletedTasksCount()
     }
 
     suspend fun deleteCompletedTasksBeforeDate(beforeDate: Long) {

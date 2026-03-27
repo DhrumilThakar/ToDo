@@ -1,17 +1,16 @@
 package com.example.todo
 
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.widget.ImageButton
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import android.widget.CheckBox
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.todo.models.Task
 import com.example.todo.repository.TaskRepository
-import com.example.todo.utils.QuadrantUtils
 import kotlinx.coroutines.launch
 
 class ActivityQuadrent : AppCompatActivity() {
@@ -26,8 +25,9 @@ class ActivityQuadrent : AppCompatActivity() {
     
     // Navigation buttons
     private lateinit var homeButton: LinearLayout
-    private lateinit var addTasksButton: LinearLayout
-    private lateinit var quadrent: LinearLayout
+    private lateinit var quadrantButton: LinearLayout
+    private lateinit var remindersButton: LinearLayout
+    private lateinit var statsButton: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,8 +43,9 @@ class ActivityQuadrent : AppCompatActivity() {
 
         // Initialize navigation buttons
         homeButton = findViewById(R.id.homeBtn)
-        addTasksButton = findViewById(R.id.addNewTaskBtn)
-        quadrent = findViewById(R.id.viewPriorityQuadrantBtn)
+        quadrantButton = findViewById(R.id.viewPriorityQuadrantBtn)
+        remindersButton = findViewById(R.id.remindersBtn)
+        statsButton = findViewById(R.id.statsBtn)
 
         setupNavigation()
         loadTasksIntoQuadrants()
@@ -58,13 +59,11 @@ class ActivityQuadrent : AppCompatActivity() {
             finish()
         }
 
-        addTasksButton.setOnClickListener {
-            Log.d("Navigation", "Calendar clicked")
-        }
-
-        quadrent.setOnClickListener {
-            // Do nothing - already in quadrant view
-        }
+        quadrantButton.setOnClickListener { /* Already here */ }
+        
+        remindersButton.setOnClickListener { /* Handle reminders */ }
+        
+        statsButton.setOnClickListener { /* Handle stats */ }
     }
 
     private fun loadTasksIntoQuadrants() {
@@ -76,42 +75,46 @@ class ActivityQuadrent : AppCompatActivity() {
                 delegateContainer.removeAllViews()
                 eliminateContainer.removeAllViews()
 
-                // Group tasks by quadrant
-                val groupedTasks = QuadrantUtils.getTasksGroupedByQuadrant(tasks)
-
-                // Populate each quadrant
-                for ((quadrant, quadrantTasks) in groupedTasks) {
-                    val container = when (quadrant) {
-                        QuadrantUtils.Quadrant.DO_FIRST -> doFirstContainer
-                        QuadrantUtils.Quadrant.SCHEDULE -> scheduleContainer
-                        QuadrantUtils.Quadrant.DELEGATE -> delegateContainer
-                        QuadrantUtils.Quadrant.ELIMINATE -> eliminateContainer
+                tasks.forEach { task ->
+                    val container = when (task.priority) {
+                        1 -> doFirstContainer
+                        2 -> scheduleContainer
+                        3 -> delegateContainer
+                        else -> eliminateContainer
                     }
-
-                    for (task in quadrantTasks) {
-                        addTaskToQuadrant(container, task)
+                    
+                    val colorRes = when (task.priority) {
+                        1 -> R.color.do_first
+                        2 -> R.color.schedule
+                        3 -> R.color.delegate
+                        else -> R.color.eliminate
                     }
+                    
+                    addTaskToQuadrant(container, task, colorRes)
                 }
             }
         }
     }
 
-    private fun addTaskToQuadrant(container: LinearLayout, task: com.example.todo.models.Task) {
+    private fun addTaskToQuadrant(container: LinearLayout, task: Task, colorRes: Int) {
         val inflater = LayoutInflater.from(this)
         val taskView = inflater.inflate(R.layout.quadrant_task_item, container, false)
 
         val taskName = taskView.findViewById<TextView>(R.id.task_name)
-        val taskCheckbox = taskView.findViewById<CheckBox>(R.id.task_checkbox)
+        val dot = taskView.findViewById<View>(R.id.dot)
 
         taskName.text = task.name
-        taskCheckbox.isChecked = task.isCompleted
+        dot.setBackgroundResource(R.drawable.circle_light_cream)
+        dot.backgroundTintList = getColorStateList(colorRes)
 
-        taskCheckbox.setOnCheckedChangeListener { _, isChecked ->
-            lifecycleScope.launch {
-                taskRepository.updateTaskCompletion(task.id, isChecked)
-                // Refresh the quadrant view after updating task completion
-                loadTasksIntoQuadrants()
-            }
+        if (task.isCompleted) {
+            taskName.paintFlags = taskName.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+            taskName.alpha = 0.5f
+            dot.alpha = 0.5f
+        } else {
+            taskName.paintFlags = taskName.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG.inv()
+            taskName.alpha = 1.0f
+            dot.alpha = 1.0f
         }
 
         container.addView(taskView)

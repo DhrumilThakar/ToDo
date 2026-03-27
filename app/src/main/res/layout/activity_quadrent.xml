@@ -4,299 +4,308 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg"
-    android:padding="12dp">
+    android:background="@color/background"
+    tools:context=".ActivityQuadrent">
 
-    <!-- Title -->
+    <!-- Header -->
     <TextView
-        android:id="@+id/titleTextView"
-        android:layout_width="0dp"
+        android:id="@+id/quadrantTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Priority Quadrants"
-        android:fontFamily="serif-monospace"
-        android:textColor="@color/text"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="24dp"
+        android:text="Quadrant view"
+        android:textColor="@color/primary_text"
         android:textSize="28sp"
         android:textStyle="bold"
-        android:gravity="center"
-        android:paddingBottom="16dp"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- Guideline for vertical split -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/vertical_guideline"
+    <TextView
+        android:id="@+id/quadrantSubtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <!-- Guideline for horizontal split -->
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/horizontal_guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.5" />
-
-    <!-- Do First (Urgent & Important) - Top Left - Red -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/do_first_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/do_first"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@id/horizontal_guideline"
-        app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
+        android:layout_marginStart="24dp"
+        android:text="Eisenhower matrix"
+        android:textColor="@color/secondary_text"
+        android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView">
+        app:layout_constraintTop_toBottomOf="@id/quadrantTitle" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Do First\n(Urgent &amp; Important)"
-                android:textColor="@color/background"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingBottom="12dp" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/do_first_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Schedule (Urgent & Not Important) - Top Right - Orange -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/schedule_card"
+    <!-- Grid Layout for Quadrants -->
+    <GridLayout
+        android:id="@+id/quadrantGrid"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="@color/schedule"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@id/horizontal_guideline"
+        android:layout_margin="16dp"
+        android:columnCount="2"
+        android:rowCount="2"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavBackground"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/titleTextView">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Schedule\n(Not Important)"
-                android:textColor="@color/background"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingBottom="12dp" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/schedule_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Delegate (Not Urgent & Important) - Bottom Left - Teal -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/delegate_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="#7C4DFF"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@id/navigation"
-        app:layout_constraintEnd_toStartOf="@id/vertical_guideline"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
+        app:layout_constraintTop_toBottomOf="@id/quadrantSubtitle">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
+        <!-- Do First -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp">
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Delegate\n(Important)"
-                android:textColor="@color/background"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingBottom="12dp" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/delegate_container"
-                    android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/quadrant_border_do_first"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-
-    <!-- Eliminate (Neither) - Bottom Right - Grey -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/eliminate_card"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="8dp"
-        app:cardBackgroundColor="#2979FF"
-        app:cardCornerRadius="12dp"
-        app:layout_constraintBottom_toTopOf="@id/navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/vertical_guideline"
-        app:layout_constraintTop_toBottomOf="@id/horizontal_guideline">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="12dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Eliminate\n(Neither)"
-                android:textColor="@color/background"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:paddingBottom="12dp" />
-
-            <ScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:id="@+id/eliminate_container"
-                    android:layout_width="match_parent"
+                    android:text="Do first"
+                    android:textColor="#FF6B6B"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </ScrollView>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                    android:text="Urgent + important"
+                    android:textColor="#80FF6B6B"
+                    android:textSize="10sp" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:id="@+id/do_first_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
-    <!-- Navigation Bar -->
+        <!-- Schedule -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/quadrant_border_schedule"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Schedule"
+                    android:textColor="#FFA500"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Not urgent + important"
+                    android:textColor="#80FFA500"
+                    android:textSize="10sp" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:id="@+id/schedule_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Delegate -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/quadrant_border_delegate"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delegate"
+                    android:textColor="#03DAC6"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Urgent + not important"
+                    android:textColor="#8003DAC6"
+                    android:textSize="10sp" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:id="@+id/delegate_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Eliminate -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_rowWeight="1"
+            android:layout_columnWeight="1"
+            android:layout_margin="8dp"
+            app:cardBackgroundColor="@android:color/transparent"
+            app:cardElevation="0dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/quadrant_border_eliminate"
+                android:orientation="vertical"
+                android:padding="16dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Eliminate"
+                    android:textColor="#CFCFCF"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Neither"
+                    android:textColor="#80CFCFCF"
+                    android:textSize="10sp" />
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="12dp">
+                    <LinearLayout
+                        android:id="@+id/eliminate_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </GridLayout>
+
+    <!-- Navigation Background -->
+    <View
+        android:id="@+id/bottomNavBackground"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="#161B22"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
     <LinearLayout
         android:id="@+id/navigation"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
         android:orientation="horizontal"
-        android:gravity="center"
-        android:padding="16dp"
-        android:elevation="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintBottom_toBottomOf="parent">
 
-        <!-- Home Button -->
         <LinearLayout
             android:id="@+id/homeBtn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            android:padding="8dp">
-            <android.widget.ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:contentDescription="Home"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/home"
-                android:scaleType="centerInside"
-                app:tint="@color/primary_text" />
+                app:tint="@color/secondary_text" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Home"
-                android:textColor="@color/primary_text"
-                android:textSize="10sp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="serif-monospace" />
+                android:textColor="@color/secondary_text"
+                android:textSize="10sp" />
         </LinearLayout>
 
-        <!-- Add New Task Button -->
-        <LinearLayout
-            android:id="@+id/addNewTaskBtn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="8dp">
-            <android.widget.ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:contentDescription="Add New Task"
-                android:src="@drawable/rounded_add_24"
-                android:scaleType="centerInside"
-                app:tint="@color/accent" />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Task"
-                android:textColor="@color/accent"
-                android:textSize="10sp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="serif-monospace" />
-        </LinearLayout>
-
-        <!-- View Priority Quadrant Button -->
         <LinearLayout
             android:id="@+id/viewPriorityQuadrantBtn"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center"
-            android:padding="8dp">
-            <android.widget.ImageView
-                android:layout_width="28dp"
-                android:layout_height="28dp"
-                android:contentDescription="View Priority Quadrant"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
                 android:src="@drawable/main_task"
-                android:scaleType="centerInside"
                 app:tint="@color/accent" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Quadrant"
                 android:textColor="@color/accent"
-                android:textSize="10sp"
-                android:layout_marginTop="4dp"
-                android:fontFamily="serif-monospace" />
+                android:textSize="10sp" />
         </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/remindersBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/calender"
+                app:tint="@color/secondary_text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Reminders"
+                android:textColor="@color/secondary_text"
+                android:textSize="10sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/statsBtn"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/list_check"
+                app:tint="@color/secondary_text" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stats"
+                android:textColor="@color/secondary_text"
+                android:textSize="10sp" />
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
