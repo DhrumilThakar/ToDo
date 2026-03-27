@@ -41,6 +41,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var subtasksContainer: LinearLayout
     private lateinit var mainTaskCard: View
     private lateinit var addMainTaskBtn: ImageButton
+    private lateinit var completeMainTaskCheckBox: CheckBox
     
     private lateinit var minorTaskNameDisplay1: TextView
     private lateinit var completeMinorTaskCheckBox1: CheckBox
@@ -182,6 +183,7 @@ class MainActivity : AppCompatActivity() {
         tagDueDate = findViewById(R.id.tagDueDate)
         subtasksContainer = findViewById(R.id.subtasksContainer)
         addMainTaskBtn = findViewById(R.id.add_main_task_btn)
+        completeMainTaskCheckBox = findViewById(R.id.completeMainTaskCheckBox)
 
         minorTaskNameDisplay1 = findViewById(R.id.minor_task_name_display_1)
         completeMinorTaskCheckBox1 = findViewById(R.id.complete1)
@@ -210,6 +212,16 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+        completeMainTaskCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            applyStrikethrough(mainTaskNameDisplay, isChecked)
+            lifecycleScope.launch {
+                currentMainTaskId?.let { 
+                    taskRepository.updateTaskCompletion(it, isChecked) 
+                    updateDoneBadge()
+                }
+            }
+        }
         
         findViewById<View>(R.id.subtask1Layout).setOnClickListener {
             if (currentSubtaskIds[0] == null) handleSubtaskAddClick("minor_task_1")
@@ -230,9 +242,21 @@ class MainActivity : AppCompatActivity() {
 
         homeButton.setOnClickListener { /* Already Home */ }
         addNewTaskButton.setOnClickListener { addDynamicTaskLauncher.launch(Intent(this, AddTaskActivity::class.java)) }
-        quadrantButton.setOnClickListener { startActivity(Intent(this, ActivityQuadrent::class.java)) }
-        remindersButton.setOnClickListener { startActivity(Intent(this, RemindersActivity::class.java)) }
-        statsButton.setOnClickListener { startActivity(Intent(this, StatsActivity::class.java)) }
+        quadrantButton.setOnClickListener { startNoAnimActivity(ActivityQuadrent::class.java) }
+        remindersButton.setOnClickListener { startNoAnimActivity(RemindersActivity::class.java) }
+        statsButton.setOnClickListener { startNoAnimActivity(StatsActivity::class.java) }
+    }
+
+    private fun startNoAnimActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+    }
+
+    private suspend fun updateDoneBadge() {
+        val completedCount = taskRepository.getCompletedTasksCount()
+        tasksDoneBadge.text = "$completedCount tasks done"
     }
 
     private fun checkNotificationPermission() {
@@ -266,13 +290,15 @@ class MainActivity : AppCompatActivity() {
     private fun loadTasksFromDatabase(scrollToBottom: Boolean = false) {
         resetFixedTaskDisplay()
         lifecycleScope.launch {
-            val completedCount = taskRepository.getCompletedTasksCount()
-            tasksDoneBadge.text = "$completedCount tasks done"
+            updateDoneBadge()
 
             taskRepository.getMainTask()?.let { mainTask ->
                 currentMainTaskId = mainTask.id
                 mainTaskNameDisplay.text = mainTask.name
                 addMainTaskBtn.visibility = View.GONE
+                completeMainTaskCheckBox.visibility = View.VISIBLE
+                completeMainTaskCheckBox.isChecked = mainTask.isCompleted
+                applyStrikethrough(mainTaskNameDisplay, mainTask.isCompleted)
                 
                 tagUrgent.visibility = if (mainTask.isUrgent) View.VISIBLE else View.GONE
                 tagImportant.visibility = if (mainTask.isImportant) View.VISIBLE else View.GONE
@@ -312,6 +338,7 @@ class MainActivity : AppCompatActivity() {
     private fun resetFixedTaskDisplay() {
         mainTaskNameDisplay.text = "Tap to add a focus task"
         addMainTaskBtn.visibility = View.VISIBLE
+        completeMainTaskCheckBox.visibility = View.GONE
         tagUrgent.visibility = View.GONE
         tagImportant.visibility = View.GONE
         tagDueDate.visibility = View.GONE
@@ -328,13 +355,14 @@ class MainActivity : AppCompatActivity() {
         applyStrikethrough(minorTaskNameDisplay1, false)
         applyStrikethrough(minorTaskNameDisplay2, false)
         applyStrikethrough(minorTaskNameDisplay3, false)
+        applyStrikethrough(mainTaskNameDisplay, false)
     }
 
     private fun addNewTaskViewToDynamicList(task: Task) {
         val taskView = LayoutInflater.from(this).inflate(R.layout.list_item_task, tasksContainer, false)
         val taskNameDisplay = taskView.findViewById<TextView>(R.id.task_name_display)
         val taskDetails = taskView.findViewById<TextView>(R.id.task_details)
-        val taskCheckbox = taskView.findViewById<CheckBox>(R.id.task_checkbox)
+        val taskCheckbox = taskCheckbox(taskView)
         val menuButton = taskView.findViewById<TextView>(R.id.task_menu_btn)
         val priorityIndicator = taskView.findViewById<View>(R.id.priorityIndicator)
 
@@ -366,6 +394,8 @@ class MainActivity : AppCompatActivity() {
         tasksContainer.addView(taskView)
     }
 
+    private fun taskCheckbox(taskView: View): CheckBox = taskView.findViewById(R.id.task_checkbox)
+
     // --- HELPER & EVENT HANDLER FUNCTIONS ---
 
     private fun handleSubtaskAddClick(sourceTag: String) {
@@ -389,7 +419,7 @@ class MainActivity : AppCompatActivity() {
                 val taskId = if (taskIndex == 0) currentMainTaskId else currentSubtaskIds.getOrNull(taskIndex - 1)
                 taskId?.let { 
                     taskRepository.updateTaskCompletion(it, isChecked) 
-                    tasksDoneBadge.text = "${taskRepository.getCompletedTasksCount()} tasks done"
+                    updateDoneBadge()
                 }
             }
         }
@@ -400,7 +430,7 @@ class MainActivity : AppCompatActivity() {
             applyStrikethrough(textView, isChecked)
             lifecycleScope.launch {
                 taskRepository.updateTaskCompletion(taskId, isChecked)
-                tasksDoneBadge.text = "${taskRepository.getCompletedTasksCount()} tasks done"
+                updateDoneBadge()
             }
         }
     }

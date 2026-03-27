@@ -16,16 +16,22 @@ class RemindersActivity : AppCompatActivity() {
 
     private fun setupNavigation() {
         findViewById<LinearLayout>(R.id.homeBtn).setOnClickListener {
-            startActivity(Intent(this, MainActivity::class.java))
-            finish()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            startNoAnimActivity(intent)
         }
         findViewById<LinearLayout>(R.id.viewPriorityQuadrantBtn).setOnClickListener {
-            startActivity(Intent(this, ActivityQuadrent::class.java))
-            finish()
+            startNoAnimActivity(Intent(this, ActivityQuadrent::class.java))
         }
         findViewById<LinearLayout>(R.id.statsBtn).setOnClickListener {
-            startActivity(Intent(this, StatsActivity::class.java))
-            finish()
+            startNoAnimActivity(Intent(this, StatsActivity::class.java))
         }
+    }
+
+    private fun startNoAnimActivity(intent: Intent) {
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
     }
 }

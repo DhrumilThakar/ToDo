@@ -55,15 +55,25 @@ class ActivityQuadrent : AppCompatActivity() {
         homeButton.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
             startActivity(intent)
+            overridePendingTransition(0, 0)
             finish()
         }
 
         quadrantButton.setOnClickListener { /* Already here */ }
         
-        remindersButton.setOnClickListener { /* Handle reminders */ }
+        remindersButton.setOnClickListener { startNoAnimActivity(RemindersActivity::class.java) }
         
-        statsButton.setOnClickListener { /* Handle stats */ }
+        statsButton.setOnClickListener { startNoAnimActivity(StatsActivity::class.java) }
+    }
+
+    private fun startNoAnimActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION)
+        startActivity(intent)
+        overridePendingTransition(0, 0)
+        finish()
     }
 
     private fun loadTasksIntoQuadrants() {

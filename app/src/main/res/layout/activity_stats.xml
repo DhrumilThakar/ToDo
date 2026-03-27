@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:text="This week"
+        android:text="Real-time data"
         android:textColor="@color/secondary_text"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
                     android:id="@+id/doneCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="7"
+                    android:text="0"
                     android:textColor="@color/primary_text"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -90,7 +90,7 @@
                     android:id="@+id/pendingCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"
+                    android:text="0"
                     android:textColor="@color/primary_text"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -121,7 +121,7 @@
                     android:id="@+id/overdueCount"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"
+                    android:text="0"
                     android:textColor="@color/primary_text"
                     android:textSize="24sp"
                     android:textStyle="bold" />
@@ -165,14 +165,15 @@
                     android:layout_height="match_parent"
                     android:indeterminate="false"
                     android:max="100"
-                    android:progress="70"
+                    android:progress="0"
                     android:progressDrawable="@drawable/circle_light_cream"
                     android:progressTint="@color/accent" />
                 <TextView
+                    android:id="@+id/percentageText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="70%\ndone"
+                    android:text="0%\ndone"
                     android:gravity="center"
                     android:textColor="@color/primary_text"
                     android:textSize="16sp"
@@ -188,25 +189,25 @@
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
                     <View android:id="@+id/dot1" android:layout_width="8dp" android:layout_height="8dp" android:layout_centerVertical="true" android:background="@drawable/circle_light_cream" android:backgroundTint="#FF6B6B" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_toEndOf="@id/dot1" android:text="Do first" android:textColor="@color/primary_text" android:textSize="14sp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="2/3" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/doFirstStats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="0/0" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
                 </RelativeLayout>
 
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
                     <View android:id="@+id/dot2" android:layout_width="8dp" android:layout_height="8dp" android:layout_centerVertical="true" android:background="@drawable/circle_light_cream" android:backgroundTint="#FFA500" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_toEndOf="@id/dot2" android:text="Schedule" android:textColor="@color/primary_text" android:textSize="14sp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="2/2" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/scheduleStats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="0/0" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
                 </RelativeLayout>
 
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginBottom="8dp">
                     <View android:id="@+id/dot3" android:layout_width="8dp" android:layout_height="8dp" android:layout_centerVertical="true" android:background="@drawable/circle_light_cream" android:backgroundTint="#03DAC6" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_toEndOf="@id/dot3" android:text="Delegate" android:textColor="@color/primary_text" android:textSize="14sp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="1/1" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/delegateStats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="0/0" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
                 </RelativeLayout>
 
                 <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content">
                     <View android:id="@+id/dot4" android:layout_width="8dp" android:layout_height="8dp" android:layout_centerVertical="true" android:background="@drawable/circle_light_cream" android:backgroundTint="#CFCFCF" />
                     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginStart="12dp" android:layout_toEndOf="@id/dot4" android:text="Eliminate" android:textColor="@color/primary_text" android:textSize="14sp" />
-                    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="2/4" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
+                    <TextView android:id="@+id/eliminateStats" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_alignParentEnd="true" android:text="0/0" android:textColor="@color/primary_text" android:textSize="14sp" android:textStyle="bold" />
                 </RelativeLayout>
 
             </LinearLayout>
@@ -242,52 +243,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Completed Task Item 1 -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardBackgroundColor="#2A2431"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="0dp">
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="16dp">
-                    <View android:id="@+id/sideIndicator1" android:layout_width="4dp" android:layout_height="40dp" android:layout_centerVertical="true" android:background="@color/accent" />
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_toEndOf="@id/sideIndicator1"
-                        android:orientation="vertical">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Review PRs"
-                            android:textColor="@color/primary_text"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Completed Mar 26"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="12sp" />
-                    </LinearLayout>
-                    <Button
-                        android:layout_width="wrap_content"
-                        android:layout_height="32dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"
-                        android:backgroundTint="#33F44336"
-                        android:paddingHorizontal="12dp"
-                        android:text="Delete"
-                        android:textColor="#F44336"
-                        android:textSize="10sp"
-                        app:cornerRadius="8dp" />
-                </RelativeLayout>
-            </androidx.cardview.widget.CardView>
+            <!-- Dynamic content will be added here -->
 
         </LinearLayout>
     </ScrollView>
