@@ -51,7 +51,7 @@ This helped users prioritize tasks effectively.
 
 # 📥 Download APK
 
-[<img src="https://tse2.mm.bing.net/th/id/OIP.2NoVmaHC4ICETmZHvtwehgAAAA" width="50"/>](https://github.com/DhrumilThakar/ToDo/releases/download/v1.0.0/app-release.apk)
+[<img src="https://tse2.mm.bing.net/th/id/OIP.2NoVmaHC4ICETmZHvtwehgAAAA" width="50"/>](https://github.com/DhrumilThakar/ToDo/releases/download/v1.0.1/app-debug.apk)
 
 **INSTALL APK**
 
